@@ -1,16 +1,14 @@
-import 'package:audio_sextafeira/app/modules/home/domain/entities/audio.dart';
-import 'package:audio_sextafeira/app/modules/home/presenter/bloc/events/audio_events.dart';
-import 'package:audio_sextafeira/app/modules/home/presenter/bloc/states/audio_states.dart';
 import 'package:flutter/material.dart';
 
-import 'package:audio_sextafeira/app/modules/home/presenter/bloc/audio_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
+import 'package:audio_sextafeira/app/modules/home/presenter/mobx/audio_store.dart';
+import 'package:audio_sextafeira/app/modules/home/presenter/widgets/button_audio_widget.dart';
 
 class HomePage extends StatefulWidget {
-  final AudioBloc audioBloc;
+  final AudioStore audioStore;
   const HomePage({
     Key? key,
-    required this.audioBloc,
+    required this.audioStore,
   }) : super(key: key);
 
   @override
@@ -18,8 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Audio auxAudio;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,112 +29,22 @@ class _HomePageState extends State<HomePage> {
           children: [
             const Text('Lista de Audios'),
             const Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    children: [
-                      BlocBuilder<AudioBloc, AudioStates>(
-                          bloc: widget.audioBloc,
-                          builder: (context, state) {
-                            return InkWell(
-                              onTap: () async {
-                                final audio = Audio(
-                                  name: '',
-                                  filePath: 'audios/uhulbomdia.mp3',
-                                );
-
-                                setState(() {});
-
-                                if (state is PlayAudioState) {
-                                  widget.audioBloc.add(StopAudioEvent());
-
-                                  if (auxAudio.filePath != audio.filePath) {
-                                    widget.audioBloc
-                                        .add(PlayAudioEvent(audio: audio));
-                                  }
-
-                                  return;
-                                }
-
-                                auxAudio = audio;
-
-                                setState(() {});
-
-                                widget.audioBloc
-                                    .add(PlayAudioEvent(audio: audio));
-                              },
-                              child: Image.asset(
-                                'assets/images/play.jpeg',
-                                width: 100,
-                              ),
-                            );
-                          }),
-                      const Text('Uhuul bom dia'),
-                    ],
-                  ),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.9,
+                  crossAxisCount: 3,
                 ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      BlocBuilder<AudioBloc, AudioStates>(
-                          bloc: widget.audioBloc,
-                          builder: (context, state) {
-                            return InkWell(
-                              onTap: () async {
-                                final audio = Audio(
-                                  name: '',
-                                  filePath: 'audios/audio2.mp3',
-                                );
-
-                                setState(() {});
-
-                                if (state is PlayAudioState) {
-                                  widget.audioBloc.add(StopAudioEvent());
-
-                                  if (auxAudio.filePath != audio.filePath) {
-                                    widget.audioBloc
-                                        .add(PlayAudioEvent(audio: audio));
-                                  }
-
-                                  return;
-                                }
-
-                                auxAudio = audio;
-
-                                setState(() {});
-
-                                widget.audioBloc
-                                    .add(PlayAudioEvent(audio: audio));
-                              },
-                              child: Image.asset(
-                                'assets/images/play.jpeg',
-                                width: 100,
-                              ),
-                            );
-                          }),
-                      const Text('Falta muito pra chegar sexta'),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: Image.asset(
-                          'assets/images/play.jpeg',
-                          width: 100,
-                        ),
-                      ),
-                      const Text('Uhuul bom dia'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                itemCount: listAudios.length,
+                itemBuilder: (context, index) {
+                  final audio = listAudios[index];
+                  return ButtonAudioWidget(
+                    audio: audio,
+                    audioStore: widget.audioStore,
+                  );
+                },
+              ),
+            )
           ],
         ),
       ),

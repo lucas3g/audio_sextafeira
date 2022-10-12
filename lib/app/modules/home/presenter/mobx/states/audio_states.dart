@@ -2,9 +2,9 @@ abstract class AudioStates {}
 
 class InitialAudioState extends AudioStates {}
 
-class LoadingAudioState extends AudioStates {}
-
 class PlayAudioState extends AudioStates {}
+
+class FinishAudioState extends AudioStates {}
 
 class StopAudioState extends AudioStates {}
 
