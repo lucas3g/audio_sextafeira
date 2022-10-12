@@ -46,6 +46,9 @@ dependencies:
   audioplayers: ^1.1.1
   mobx: ^2.1.1
   flutter_mobx: ^2.0.6+4
+  share_plus: ^4.5.3
+  cross_file: ^0.3.3+2
+
 
 dev_dependencies:
   flutter_test:

@@ -45,8 +45,16 @@ mixin _$AudioStore on _AudioStoreBase, Store {
       AsyncAction('_AudioStoreBase.playAudio', context: context);
 
   @override
-  Future<void> playAudio(Audio audio) {
+  Future<dynamic> playAudio(Audio audio) {
     return _$playAudioAsyncAction.run(() => super.playAudio(audio));
+  }
+
+  late final _$shareAudioAsyncAction =
+      AsyncAction('_AudioStoreBase.shareAudio', context: context);
+
+  @override
+  Future<dynamic> shareAudio(Audio audio) {
+    return _$shareAudioAsyncAction.run(() => super.shareAudio(audio));
   }
 
   @override

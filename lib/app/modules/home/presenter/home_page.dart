@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.9,
+                  childAspectRatio: 0.7,
                   crossAxisCount: 3,
                 ),
                 itemCount: listAudios.length,
@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
                   return ButtonAudioWidget(
                     audio: audio,
                     audioStore: widget.audioStore,
+                    index: index,
                   );
                 },
               ),
