@@ -14,7 +14,7 @@ class AppWidget extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         primarySwatch: AppTheme.colors.primary,
-        scaffoldBackgroundColor: AppTheme.colors.backgroundPrimary,
+        scaffoldBackgroundColor: AppTheme.colors.primary,
         appBarTheme: AppBarTheme(
           backgroundColor: AppTheme.colors.primary,
           titleTextStyle: AppTheme.textStyles.titleAppBar,
