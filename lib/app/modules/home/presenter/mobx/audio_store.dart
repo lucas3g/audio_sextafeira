@@ -30,11 +30,11 @@ abstract class _AudioStoreBase with Store {
   }
 
   @action
-  Future playAudio(Audio audio) async {
+  void playAudio(Audio audio) {
     if (audioPlay != audio.filePath) {
       emit(PlayAudioState());
       audioPlay = audio.filePath;
-      await audioPlayer.play(AssetSource(audio.filePath));
+      audioPlayer.play(AssetSource(audio.filePath));
 
       audioPlayer.onPlayerComplete.listen((event) {
         emit(FinishAudioState());
@@ -42,18 +42,18 @@ abstract class _AudioStoreBase with Store {
     } else {
       if (state is StopAudioState) {
         emit(PlayAudioState());
-        await audioPlayer.play(AssetSource(audio.filePath));
+        audioPlayer.play(AssetSource(audio.filePath));
 
         return;
       }
-      await audioPlayer.stop();
+      audioPlayer.stop();
       emit(StopAudioState());
     }
   }
 
   @action
   Future shareAudio(Audio audio) async {
-    final file = [XFile(audio.filePath)];
+    final file = [XFile('assets/${audio.filePath}')];
     await Share.shareXFiles(file);
   }
 }

@@ -33,9 +33,9 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
           builder: (_) {
             final state = widget.audioStore.state;
 
-            return InkWell(
-              onTap: () async {
-                await widget.audioStore.playAudio(widget.audio);
+            return GestureDetector(
+              onTap: () {
+                widget.audioStore.playAudio(widget.audio);
               },
               child: Container(
                 decoration: BoxDecoration(

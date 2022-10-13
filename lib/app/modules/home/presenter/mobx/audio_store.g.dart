@@ -41,20 +41,26 @@ mixin _$AudioStore on _AudioStoreBase, Store {
     });
   }
 
-  late final _$playAudioAsyncAction =
-      AsyncAction('_AudioStoreBase.playAudio', context: context);
-
-  @override
-  Future<dynamic> playAudio(Audio audio) {
-    return _$playAudioAsyncAction.run(() => super.playAudio(audio));
-  }
-
   late final _$shareAudioAsyncAction =
       AsyncAction('_AudioStoreBase.shareAudio', context: context);
 
   @override
   Future<dynamic> shareAudio(Audio audio) {
     return _$shareAudioAsyncAction.run(() => super.shareAudio(audio));
+  }
+
+  late final _$_AudioStoreBaseActionController =
+      ActionController(name: '_AudioStoreBase', context: context);
+
+  @override
+  void playAudio(Audio audio) {
+    final _$actionInfo = _$_AudioStoreBaseActionController.startAction(
+        name: '_AudioStoreBase.playAudio');
+    try {
+      return super.playAudio(audio);
+    } finally {
+      _$_AudioStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
