@@ -24,31 +24,37 @@ Color randomColor() {
 
 final List<Audio> listAudios = [
   Audio(
+    id: 1,
     name: 'Uhuul bom dia',
     filePath: 'audios/uhulbomdia.mp3',
     buttonColor: randomColor(),
   ),
   Audio(
+    id: 2,
     name: 'Falta muito pra chegar sexta?',
     filePath: 'audios/faltamuitosexta.mp3',
     buttonColor: randomColor(),
   ),
   Audio(
+    id: 3,
     name: 'Tão pronto pro gole de hoje?',
     filePath: 'audios/taoprontogole.mp3',
     buttonColor: randomColor(),
   ),
   Audio(
+    id: 4,
     name: 'Chegou a sexta diabedo',
     filePath: 'audios/chegouasextadiabedo.mp3',
     buttonColor: randomColor(),
   ),
   Audio(
+    id: 5,
     name: 'É gurizada sexta-feira',
     filePath: 'audios/ehgurizadasextafeira.mp3',
     buttonColor: randomColor(),
   ),
   Audio(
+    id: 6,
     name: 'Ai tu acordo pia',
     filePath: 'audios/aituacordopia.mp3',
     buttonColor: randomColor(),

@@ -1,6 +1,9 @@
 import 'package:audio_sextafeira/app/modules/home/presenter/home_page.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/favorito_module.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/lista_audios_module.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -47,7 +50,21 @@ class HomeModule extends Module {
   ];
 
   @override
-  final List<Bind<Object>> binds = [];
+  final List<Bind<Object>> binds = [
+    //Player
+    Bind.singleton(
+      (i) => AudioPlayer(),
+    ),
+
+    //Mobx
+    Bind.singleton<AudioStore>(
+      (i) => AudioStore(audioPlayer: i(), localStorage: i()),
+    ),
+
+    Bind.singleton<FavoritoStore>(
+      (i) => FavoritoStore(localStorage: i()),
+    ),
+  ];
 
   @override
   final List<ModularRoute> routes = [

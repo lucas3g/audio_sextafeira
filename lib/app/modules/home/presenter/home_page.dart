@@ -1,5 +1,5 @@
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -66,10 +66,12 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ],
-        onTap: (index) {
+        onTap: (index) async {
           setState(() {
             _currentIndex = index;
           });
+
+          await Modular.get<AudioStore>().stopAudio();
 
           if (index == 0) {
             Modular.to.pushReplacementNamed('../lista/');
@@ -77,7 +79,6 @@ class _HomePageState extends State<HomePage> {
             return;
           }
 
-          Modular.get<AudioPlayer>().stop();
           Modular.to.pushReplacementNamed('../favorito/');
         },
       ),

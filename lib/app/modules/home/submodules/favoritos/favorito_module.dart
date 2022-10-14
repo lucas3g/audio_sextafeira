@@ -1,4 +1,5 @@
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/favorito_page.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class FavoritoModule extends Module {
@@ -12,7 +13,9 @@ class FavoritoModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute(
       '/',
-      child: ((context, args) => const FavoritoPage()),
+      child: ((context, args) => FavoritoPage(
+            favoritoStore: Modular.get<FavoritoStore>(),
+          )),
     ),
   ];
 }

@@ -41,12 +41,36 @@ mixin _$AudioStore on _AudioStoreBase, Store {
     });
   }
 
+  late final _$stopAudioAsyncAction =
+      AsyncAction('_AudioStoreBase.stopAudio', context: context);
+
+  @override
+  Future<dynamic> stopAudio() {
+    return _$stopAudioAsyncAction.run(() => super.stopAudio());
+  }
+
   late final _$shareAudioAsyncAction =
       AsyncAction('_AudioStoreBase.shareAudio', context: context);
 
   @override
   Future<dynamic> shareAudio(Audio audio) {
     return _$shareAudioAsyncAction.run(() => super.shareAudio(audio));
+  }
+
+  late final _$favoritarAsyncAction =
+      AsyncAction('_AudioStoreBase.favoritar', context: context);
+
+  @override
+  Future<void> favoritar(Audio audio) {
+    return _$favoritarAsyncAction.run(() => super.favoritar(audio));
+  }
+
+  late final _$removeFavoritoAsyncAction =
+      AsyncAction('_AudioStoreBase.removeFavorito', context: context);
+
+  @override
+  Future<void> removeFavorito(Audio audio) {
+    return _$removeFavoritoAsyncAction.run(() => super.removeFavorito(audio));
   }
 
   late final _$_AudioStoreBaseActionController =
@@ -58,6 +82,17 @@ mixin _$AudioStore on _AudioStoreBase, Store {
         name: '_AudioStoreBase.playAudio');
     try {
       return super.playAudio(audio);
+    } finally {
+      _$_AudioStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  bool verificaFavorito(Audio audio) {
+    final _$actionInfo = _$_AudioStoreBaseActionController.startAction(
+        name: '_AudioStoreBase.verificaFavorito');
+    try {
+      return super.verificaFavorito(audio);
     } finally {
       _$_AudioStoreBaseActionController.endAction(_$actionInfo);
     }

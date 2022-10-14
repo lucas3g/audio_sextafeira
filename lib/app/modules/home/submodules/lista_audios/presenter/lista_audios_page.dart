@@ -1,6 +1,6 @@
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
-import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/widgets/button_audio_widget.dart';
+import 'package:audio_sextafeira/app/core_module/components/widgets/button_audio_widget.dart';
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:flutter/material.dart';
 
