@@ -1,8 +1,10 @@
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,15 +16,33 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late int _currentIndex = 0;
 
+  final BannerAd myBanner = BannerAd(
+    adUnitId: adUnitID,
+    size: AdSize.banner,
+    request: const AdRequest(),
+    listener: const BannerAdListener(),
+  );
+
   @override
   void initState() {
     super.initState();
+
+    myBanner.load();
 
     Modular.to.pushNamed('./lista/');
   }
 
   @override
   Widget build(BuildContext context) {
+    final AdWidget adWidget = AdWidget(ad: myBanner);
+
+    final Container adContainer = Container(
+      alignment: Alignment.center,
+      width: myBanner.size.width.toDouble(),
+      height: myBanner.size.height.toDouble(),
+      child: adWidget,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Audios para Sexta Feira'),
@@ -31,56 +51,63 @@ class _HomePageState extends State<HomePage> {
         shadowColor: Colors.black,
       ),
       body: const RouterOutlet(),
-      bottomNavigationBar: CurvedNavigationBar(
-        index: _currentIndex,
-        height: 60,
-        color: Colors.white,
-        backgroundColor: AppTheme.colors.primary,
-        items: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.audiotrack_rounded,
-                size: 20,
-                color: AppTheme.colors.primary,
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          adContainer,
+          const SizedBox(height: 10),
+          CurvedNavigationBar(
+            index: _currentIndex,
+            height: 60,
+            color: Colors.white,
+            backgroundColor: AppTheme.colors.primary,
+            items: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.audiotrack_rounded,
+                    size: 20,
+                    color: AppTheme.colors.primary,
+                  ),
+                  Visibility(
+                    visible: _currentIndex == 1,
+                    child: const Text('Audios'),
+                  ),
+                ],
               ),
-              Visibility(
-                visible: _currentIndex == 1,
-                child: const Text('Audios'),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.star,
+                    size: 20,
+                    color: AppTheme.colors.primary,
+                  ),
+                  Visibility(
+                    visible: _currentIndex == 0,
+                    child: const Text('Favoritos'),
+                  ),
+                ],
               ),
             ],
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.star,
-                size: 20,
-                color: AppTheme.colors.primary,
-              ),
-              Visibility(
-                visible: _currentIndex == 0,
-                child: const Text('Favoritos'),
-              ),
-            ],
+            onTap: (index) async {
+              setState(() {
+                _currentIndex = index;
+              });
+
+              await Modular.get<AudioStore>().stopAudio();
+
+              if (index == 0) {
+                Modular.to.pushReplacementNamed('../lista/');
+
+                return;
+              }
+
+              Modular.to.pushReplacementNamed('../favorito/');
+            },
           ),
         ],
-        onTap: (index) async {
-          setState(() {
-            _currentIndex = index;
-          });
-
-          await Modular.get<AudioStore>().stopAudio();
-
-          if (index == 0) {
-            Modular.to.pushReplacementNamed('../lista/');
-
-            return;
-          }
-
-          Modular.to.pushReplacementNamed('../favorito/');
-        },
       ),
     );
   }

@@ -5,6 +5,8 @@ import 'dart:math' as math;
 const baseUrl = String.fromEnvironment('BASE_URL');
 const baseUrlLicense = String.fromEnvironment('BASE_URL_LICENSE');
 
+const adUnitID = 'ca-app-pub-3299816017749878/6885593774';
+
 Color randomColor() {
   final colors = [
     Colors.red,
