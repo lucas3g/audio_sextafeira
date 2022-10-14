@@ -45,6 +45,7 @@ class _ListaAudiosPageState extends State<ListaAudiosPage> {
           children: [
             Expanded(
               child: GridView.builder(
+                padding: const EdgeInsets.only(bottom: 15),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 0.6,
                   crossAxisCount: 3,
@@ -53,6 +54,8 @@ class _ListaAudiosPageState extends State<ListaAudiosPage> {
                 ),
                 itemCount: listAudios.length,
                 itemBuilder: (context, index) {
+                  listAudios.sort((a, b) => b.id.compareTo(a.id));
+
                   final audio = listAudios[index];
                   return ButtonAudioWidget(
                     audio: audio,

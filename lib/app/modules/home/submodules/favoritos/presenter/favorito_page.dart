@@ -53,6 +53,7 @@ class _FavoritoPageState extends State<FavoritoPage> {
             }
 
             return GridView.builder(
+              padding: const EdgeInsets.only(bottom: 15),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 0.6,
                 crossAxisCount: 3,

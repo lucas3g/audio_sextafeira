@@ -37,7 +37,7 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
           BoxShadow(
             color: Colors.black38,
             blurRadius: 5,
-            offset: Offset(0, 10),
+            offset: Offset(5, 7),
           )
         ],
       ),
@@ -72,6 +72,7 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
               widget.audio.name,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
             ),
             Column(
               children: [
