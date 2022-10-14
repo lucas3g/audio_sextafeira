@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late int _currentIndex = 0;
+  final audioStore = Modular.get<AudioStore>();
 
   final BannerAd myBanner = BannerAd(
     adUnitId: adUnitID,
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                 _currentIndex = index;
               });
 
-              await Modular.get<AudioStore>().stopAudio();
+              await audioStore.stopAudio();
 
               if (index == 0) {
                 Modular.to.pushReplacementNamed('../lista/');
