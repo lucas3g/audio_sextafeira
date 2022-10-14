@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
@@ -28,7 +30,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    myBanner.load();
+    if (!Platform.isWindows) {
+      myBanner.load();
+    }
 
     Modular.to.pushNamed('./lista/');
   }
@@ -55,8 +59,10 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          adContainer,
-          const SizedBox(height: 10),
+          if (!Platform.isWindows) ...[
+            adContainer,
+            const SizedBox(height: 10),
+          ],
           CurvedNavigationBar(
             index: _currentIndex,
             height: 60,

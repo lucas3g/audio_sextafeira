@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_sextafeira/app/app_module.dart';
 import 'package:audio_sextafeira/app/app_widget.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,9 @@ import 'package:intl/intl_standalone.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  if (!Platform.isWindows) {
+    MobileAds.instance.initialize();
+  }
   await initializeDateFormatting(await findSystemLocale(), '');
 
   runApp(
