@@ -26,6 +26,7 @@ class ButtonAudioWidget extends StatefulWidget {
 
 class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   final favoritoStore = Modular.get<FavoritoStore>();
+
   @override
   Widget build(BuildContext context) {
     return Container(

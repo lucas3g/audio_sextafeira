@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
+import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -17,13 +18,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late int _currentIndex = 0;
-  final audioStore = Modular.get<AudioStore>();
 
   final BannerAd myBanner = BannerAd(
     adUnitId: adUnitID,
     size: AdSize.banner,
     request: const AdRequest(),
-    listener: const BannerAdListener(),
+    listener: BannerAdListener(
+      onAdFailedToLoad: (ad, error) {
+        MySnackBar(message: error.message);
+      },
+      onAdOpened: (ad) {
+        MySnackBar(message: 'Abriu');
+      },
+      onAdLoaded: (ad) {
+        MySnackBar(message: 'Carregou');
+      },
+    ),
   );
 
   @override
@@ -103,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                 _currentIndex = index;
               });
 
-              await audioStore.stopAudio();
+              await Modular.get<AudioStore>().stopAudio();
 
               if (index == 0) {
                 Modular.to.pushReplacementNamed('../lista/');

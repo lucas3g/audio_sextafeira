@@ -12,6 +12,8 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   Future init() async {
     await Modular.isModuleReady<AppModule>();
+
+    Modular.to.navigate('/home/');
   }
 
   @override
@@ -19,8 +21,6 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
 
     init();
-
-    Modular.to.navigate('/home/');
   }
 
   @override

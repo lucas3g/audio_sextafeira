@@ -10,9 +10,11 @@ import 'package:intl/intl_standalone.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   if (!Platform.isWindows) {
     MobileAds.instance.initialize();
   }
+
   await initializeDateFormatting(await findSystemLocale(), '');
 
   runApp(
