@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_sextafeira/app/core_module/services/shared_preferences/adapters/shared_params.dart';
+import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
@@ -73,6 +74,8 @@ abstract class _AudioStoreBase with Store {
 
   @action
   Future shareAudio(Audio audio) async {
+    MySnackBar(message: 'Carregando audio. Aguarde...');
+
     ByteData audioByte = await rootBundle.load('assets/${audio.filePath}');
     final temp = await getTemporaryDirectory();
     final path = '${temp.path}/${audio.filePath}';
