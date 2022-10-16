@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
-import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -20,20 +19,10 @@ class _HomePageState extends State<HomePage> {
   late int _currentIndex = 0;
 
   final BannerAd myBanner = BannerAd(
-    adUnitId: adUnitID,
+    adUnitId: bannerID,
     size: AdSize.banner,
     request: const AdRequest(),
-    listener: BannerAdListener(
-      onAdFailedToLoad: (ad, error) {
-        MySnackBar(message: error.message);
-      },
-      onAdOpened: (ad) {
-        MySnackBar(message: 'Abriu');
-      },
-      onAdLoaded: (ad) {
-        MySnackBar(message: 'Carregou');
-      },
-    ),
+    listener: const BannerAdListener(),
   );
 
   @override
@@ -51,13 +40,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final AdWidget adWidget = AdWidget(ad: myBanner);
 
-    final Container adContainer = Container(
-      alignment: Alignment.center,
-      width: myBanner.size.width.toDouble(),
-      height: myBanner.size.height.toDouble(),
-      child: adWidget,
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Audios para Sexta Feira'),
@@ -70,7 +52,12 @@ class _HomePageState extends State<HomePage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (!Platform.isWindows) ...[
-            adContainer,
+            Container(
+              alignment: Alignment.center,
+              width: myBanner.size.width.toDouble(),
+              height: myBanner.size.height.toDouble(),
+              child: adWidget,
+            ),
             const SizedBox(height: 10),
           ],
           CurvedNavigationBar(

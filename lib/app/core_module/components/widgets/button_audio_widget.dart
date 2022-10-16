@@ -1,3 +1,4 @@
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/domain/entities/audio.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'package:audio_sextafeira/app/utils/constants.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class ButtonAudioWidget extends StatefulWidget {
   final Audio audio;
@@ -26,6 +28,37 @@ class ButtonAudioWidget extends StatefulWidget {
 
 class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   final favoritoStore = Modular.get<FavoritoStore>();
+
+  bool isLoaded = false;
+
+  late InterstitialAd myInterstital;
+
+  @override
+  void initState() {
+    super.initState();
+
+    InterstitialAd.load(
+      adUnitId: intersticialID,
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: onAdLoaded,
+        onAdFailedToLoad: (error) {},
+      ),
+    );
+  }
+
+  onAdLoaded(InterstitialAd ad) {
+    myInterstital = ad;
+
+    isLoaded = true;
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    myInterstital.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +85,28 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
-              onTap: () {
-                widget.audioStore.playAudio(widget.audio);
+              onTap: () async {
+                if (isLoaded) {
+                  setState(() {
+                    isLoaded = false;
+                  });
+                  myInterstital.show();
+
+                  myInterstital.fullScreenContentCallback =
+                      FullScreenContentCallback(
+                    onAdDismissedFullScreenContent: (ad) {
+                      widget.audioStore.playAudio(widget.audio);
+                    },
+                  );
+                } else {
+                  widget.audioStore.playAudio(widget.audio);
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
                   color: widget.audio.buttonColor,
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius:
+                      BorderRadius.circular((context.screenWidth * .5)),
                 ),
                 child: Image.asset(
                   state is PlayAudioState &&
