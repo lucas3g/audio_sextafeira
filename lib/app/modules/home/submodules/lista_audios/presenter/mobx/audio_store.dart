@@ -46,11 +46,7 @@ abstract class _AudioStoreBase with Store {
       if (audioPlay != audio.filePath) {
         if (localStorage.getData('contador') != null) {
           late int contador = localStorage.getData('contador') as int;
-          if (contador == 3) {
-            contador = 0;
-          } else {
-            contador++;
-          }
+          contador++;
 
           await localStorage.setData(
             params: SharedParams(key: 'contador', value: contador),
