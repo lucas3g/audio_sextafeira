@@ -1,15 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:audio_sextafeira/app/core_module/services/shared_preferences/local_storage_interface.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/domain/entities/audio.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-
 import 'package:audio_sextafeira/app/utils/constants.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class ButtonAudioWidget extends StatefulWidget {
   final Audio audio;
@@ -28,6 +30,7 @@ class ButtonAudioWidget extends StatefulWidget {
 
 class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   final favoritoStore = Modular.get<FavoritoStore>();
+  final localStorage = Modular.get<ILocalStorage>();
 
   bool isLoaded = false;
 
@@ -49,6 +52,12 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
 
   onAdLoaded(InterstitialAd ad) {
     myInterstital = ad;
+
+    myInterstital.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        widget.audioStore.playAudio(widget.audio);
+      },
+    );
 
     isLoaded = true;
     setState(() {});
@@ -90,17 +99,21 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
                   setState(() {
                     isLoaded = false;
                   });
-                  myInterstital.show();
 
-                  myInterstital.fullScreenContentCallback =
-                      FullScreenContentCallback(
-                    onAdDismissedFullScreenContent: (ad) {
-                      widget.audioStore.playAudio(widget.audio);
-                    },
-                  );
-                } else {
-                  widget.audioStore.playAudio(widget.audio);
+                  if (localStorage.getData('contador') != null) {
+                    final contador = localStorage.getData('contador') as int;
+
+                    if (contador < 3) {
+                      myInterstital.show();
+                    }
+
+                    return;
+                  }
+
+                  myInterstital.show();
+                  return;
                 }
+                widget.audioStore.playAudio(widget.audio);
               },
               child: Container(
                 decoration: BoxDecoration(

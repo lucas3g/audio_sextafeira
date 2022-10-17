@@ -41,9 +41,25 @@ abstract class _AudioStoreBase with Store {
   }
 
   @action
-  void playAudio(Audio audio) {
+  Future<void> playAudio(Audio audio) async {
     try {
       if (audioPlay != audio.filePath) {
+        if (localStorage.getData('contador') != null) {
+          late int contador = localStorage.getData('contador') as int;
+          if (contador == 3) {
+            contador = 0;
+          } else {
+            contador++;
+          }
+
+          await localStorage.setData(
+            params: SharedParams(key: 'contador', value: contador),
+          );
+        } else {
+          await localStorage.setData(
+            params: SharedParams(key: 'contador', value: 1),
+          );
+        }
         emit(PlayAudioState());
         audioPlay = audio.filePath;
         audioPlayer.play(AssetSource(audio.filePath));
