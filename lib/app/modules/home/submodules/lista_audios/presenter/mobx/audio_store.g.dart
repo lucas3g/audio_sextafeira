@@ -41,6 +41,22 @@ mixin _$AudioStore on _AudioStoreBase, Store {
     });
   }
 
+  late final _$contadorAtom =
+      Atom(name: '_AudioStoreBase.contador', context: context);
+
+  @override
+  int get contador {
+    _$contadorAtom.reportRead();
+    return super.contador;
+  }
+
+  @override
+  set contador(int value) {
+    _$contadorAtom.reportWrite(value, super.contador, () {
+      super.contador = value;
+    });
+  }
+
   late final _$playAudioAsyncAction =
       AsyncAction('_AudioStoreBase.playAudio', context: context);
 
@@ -98,7 +114,8 @@ mixin _$AudioStore on _AudioStoreBase, Store {
   @override
   String toString() {
     return '''
-audioPlay: ${audioPlay}
+audioPlay: ${audioPlay},
+contador: ${contador}
     ''';
   }
 }

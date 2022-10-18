@@ -1,4 +1,4 @@
-package com.example.audio_sextafeira
+package com.maktubcompany.audiosextafeira
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,14 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:io';
 
-import 'package:audio_sextafeira/app/core_module/services/shared_preferences/adapters/shared_params.dart';
 import 'package:audio_sextafeira/app/core_module/services/shared_preferences/local_storage_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/domain/entities/audio.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
@@ -35,32 +31,9 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   final favoritoStore = Modular.get<FavoritoStore>();
   final localStorage = Modular.get<ILocalStorage>();
 
-  late InterstitialAd myInterstital;
-
   @override
   void initState() {
     super.initState();
-
-    if (!Platform.isWindows) {
-      InterstitialAd.load(
-        adUnitId: intersticialID,
-        request: const AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: onAdLoaded,
-          onAdFailedToLoad: (error) {},
-        ),
-      );
-    }
-  }
-
-  onAdLoaded(InterstitialAd ad) {
-    myInterstital = ad;
-
-    myInterstital.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (ad) {
-        widget.audioStore.playAudio(widget.audio);
-      },
-    );
   }
 
   @override
@@ -89,19 +62,6 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
           children: [
             GestureDetector(
               onTap: () async {
-                if (localStorage.getData('contador') != null) {
-                  final contador = localStorage.getData('contador') as int;
-
-                  if (contador >= 2) {
-                    await localStorage.setData(
-                        params: SharedParams(key: 'contador', value: 0));
-                    myInterstital.show();
-                    return;
-                  }
-                  widget.audioStore.playAudio(widget.audio);
-                  return;
-                }
-
                 widget.audioStore.playAudio(widget.audio);
               },
               child: Container(

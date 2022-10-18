@@ -7,6 +7,7 @@ import 'package:audio_sextafeira/app/core_module/services/shared_preferences/ada
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -22,6 +23,7 @@ class AudioStore = _AudioStoreBase with _$AudioStore;
 abstract class _AudioStoreBase with Store {
   final AudioPlayer audioPlayer;
   final ILocalStorage localStorage;
+  late InterstitialAd myInterstital;
 
   _AudioStoreBase({
     required this.audioPlayer,
@@ -34,6 +36,9 @@ abstract class _AudioStoreBase with Store {
   @observable
   String audioPlay = '';
 
+  @observable
+  int contador = 0;
+
   AudioStates get state => _state;
 
   emit(AudioStates state) {
@@ -44,18 +49,58 @@ abstract class _AudioStoreBase with Store {
   Future<void> playAudio(Audio audio) async {
     try {
       if (audioPlay != audio.filePath) {
-        if (localStorage.getData('contador') != null) {
-          late int contador = localStorage.getData('contador') as int;
-          contador++;
+        // if (contador == 2) {
+        //   if (!Platform.isWindows) {
+        //     if (state is PlayAudioState) {
+        //       audioPlayer.stop();
+        //       emit(StopAudioState());
+        //     }
 
-          await localStorage.setData(
-            params: SharedParams(key: 'contador', value: contador),
-          );
-        } else {
-          await localStorage.setData(
-            params: SharedParams(key: 'contador', value: 1),
-          );
-        }
+        //     InterstitialAd.load(
+        //       adUnitId: intersticialID,
+        //       request: const AdRequest(),
+        //       adLoadCallback: InterstitialAdLoadCallback(
+        //         onAdLoaded: (InterstitialAd ad) {
+        //           myInterstital = ad;
+
+        //           myInterstital.show();
+
+        //           myInterstital.fullScreenContentCallback =
+        //               FullScreenContentCallback(
+        //             onAdDismissedFullScreenContent: (ad) {
+        //               ad.dispose();
+        //               myInterstital.dispose();
+
+        //               emit(PlayAudioState());
+
+        //               audioPlay = audio.filePath;
+
+        //               audioPlayer.play(AssetSource(audio.filePath));
+
+        //               audioPlayer.onPlayerComplete.listen((event) {
+        //                 emit(FinishAudioState());
+        //               });
+        //             },
+        //             onAdFailedToShowFullScreenContent: (ad, error) {
+        //               ad.dispose();
+        //               myInterstital.dispose();
+        //               debugPrint('Oi ${error.message}');
+        //             },
+        //           );
+        //         },
+        //         onAdFailedToLoad: (error) {
+        //           debugPrint('Oi 2 ${error.message}');
+        //         },
+        //       ),
+        //     );
+        //   }
+
+        //   contador = 0;
+        //   return;
+        // } else {
+        //   contador++;
+        // }
+
         emit(PlayAudioState());
         audioPlay = audio.filePath;
         audioPlayer.play(AssetSource(audio.filePath));
