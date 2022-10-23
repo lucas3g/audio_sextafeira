@@ -48,6 +48,8 @@ abstract class _AudioStoreBase with Store {
   @action
   Future<void> playAudio(Audio audio) async {
     try {
+      audioPlayer.setPlaybackRate(1.0);
+
       if (audioPlay != audio.filePath) {
         // if (contador == 2) {
         //   if (!Platform.isWindows) {

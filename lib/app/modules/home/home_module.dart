@@ -57,7 +57,7 @@ class HomeModule extends Module {
     ),
 
     //Mobx
-    Bind.factory<AudioStore>(
+    Bind.singleton<AudioStore>(
       (i) => AudioStore(audioPlayer: i(), localStorage: i()),
     ),
 

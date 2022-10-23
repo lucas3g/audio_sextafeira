@@ -28,6 +28,7 @@ abstract class AppTextStyles {
   TextStyle get titleTotalGeralCRCP;
   TextStyle get titleResumoFp;
   TextStyle get labelButtonLogin;
+  TextStyle get labelMinutesAudioPlayer;
 }
 
 class AppTextStylesDefault implements AppTextStyles {
@@ -178,6 +179,13 @@ class AppTextStylesDefault implements AppTextStyles {
 
   @override
   TextStyle get labelButtonLogin => GoogleFonts.roboto(
+        fontSize: 14,
+        color: AppTheme.colors.primary,
+        fontWeight: FontWeight.bold,
+      );
+
+  @override
+  TextStyle get labelMinutesAudioPlayer => GoogleFonts.roboto(
         fontSize: 14,
         color: AppTheme.colors.primary,
         fontWeight: FontWeight.bold,
