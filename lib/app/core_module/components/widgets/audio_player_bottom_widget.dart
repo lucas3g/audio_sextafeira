@@ -104,7 +104,13 @@ class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                'Tempo:',
+                style: AppTheme.textStyles.labelButtonLogin,
+              ),
+              const SizedBox(width: 10),
               Text(
                 _position != null
                     ? '$_positionText / $_durationText'
@@ -113,9 +119,14 @@ class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget> {
                         : '',
                 style: AppTheme.textStyles.labelButtonLogin,
               ),
-              const SizedBox(width: 10),
-              TextButton(
-                onPressed: () {
+              SizedBox(
+                height: 30,
+                child: VerticalDivider(
+                  color: AppTheme.colors.primary,
+                ),
+              ),
+              InkWell(
+                onTap: () {
                   if (set2x) {
                     widget.audioStore.audioPlayer.setPlaybackRate(1.0);
                   } else {
@@ -126,7 +137,10 @@ class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget> {
                     set2x = !set2x;
                   });
                 },
-                child: Text(set2x ? '1x' : '2x'),
+                child: Text(
+                  set2x ? '1x' : '2x',
+                  style: AppTheme.textStyles.labelButtonLogin,
+                ),
               )
             ],
           ),

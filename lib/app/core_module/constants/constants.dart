@@ -26,6 +26,18 @@ Color randomColor() {
 
 final List<Audio> listAudios = [
   Audio(
+    id: 8,
+    name: 'Eu tenho rainike, band',
+    filePath: 'audios/emilde.mp3',
+    buttonColor: randomColor(),
+  ),
+  Audio(
+    id: 7,
+    name: 'Só mai mei dia',
+    filePath: 'audios/somaimedia.mp3',
+    buttonColor: randomColor(),
+  ),
+  Audio(
     id: 7,
     name: 'Mais meio dia!!',
     filePath: 'audios/maismediodia.mp3',
