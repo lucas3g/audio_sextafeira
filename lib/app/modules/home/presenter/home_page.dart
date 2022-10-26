@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:audio_sextafeira/app/core_module/components/widgets/audio_player_bottom_widget.dart';
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
@@ -6,6 +9,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,27 +22,27 @@ class _HomePageState extends State<HomePage> {
   late int _currentIndex = 0;
   final AudioStore audioStore = Modular.get<AudioStore>();
 
-  // final BannerAd myBanner = BannerAd(
-  //   adUnitId: bannerID,
-  //   size: AdSize.banner,
-  //   request: const AdRequest(),
-  //   listener: const BannerAdListener(),
-  // );
+  final BannerAd myBanner = BannerAd(
+    adUnitId: bannerID,
+    size: AdSize.banner,
+    request: const AdRequest(),
+    listener: const BannerAdListener(),
+  );
 
   @override
   void initState() {
     super.initState();
 
-    // if (!Platform.isWindows) {
-    //   myBanner.load();
-    // }
+    if (!Platform.isWindows) {
+      myBanner.load();
+    }
 
     Modular.to.pushNamed('./lista/');
   }
 
   @override
   Widget build(BuildContext context) {
-    // final AdWidget adWidget = AdWidget(ad: myBanner);
+    final AdWidget adWidget = AdWidget(ad: myBanner);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,15 +61,15 @@ class _HomePageState extends State<HomePage> {
               child: AudioPlayerBottomWidget(audioStore: audioStore),
             );
           }),
-          // if (!Platform.isWindows) ...[
-          //   Container(
-          //     alignment: Alignment.center,
-          //     width: myBanner.size.width.toDouble(),
-          //     height: myBanner.size.height.toDouble(),
-          //     child: adWidget,
-          //   ),
-          //   const SizedBox(height: 10),
-          // ],
+          if (!Platform.isWindows) ...[
+            Container(
+              alignment: Alignment.center,
+              width: myBanner.size.width.toDouble(),
+              height: myBanner.size.height.toDouble(),
+              child: adWidget,
+            ),
+            const SizedBox(height: 10),
+          ],
           CurvedNavigationBar(
             index: _currentIndex,
             height: 60,

@@ -3,9 +3,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/core_module/services/shared_preferences/adapters/shared_params.dart';
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobx/mobx.dart';
@@ -51,57 +53,57 @@ abstract class _AudioStoreBase with Store {
       audioPlayer.setPlaybackRate(1.0);
 
       if (audioPlay != audio.filePath) {
-        // if (contador == 2) {
-        //   if (!Platform.isWindows) {
-        //     if (state is PlayAudioState) {
-        //       audioPlayer.stop();
-        //       emit(StopAudioState());
-        //     }
+        if (contador == 2) {
+          if (!Platform.isWindows) {
+            if (state is PlayAudioState) {
+              audioPlayer.stop();
+              emit(StopAudioState());
+            }
 
-        //     InterstitialAd.load(
-        //       adUnitId: intersticialID,
-        //       request: const AdRequest(),
-        //       adLoadCallback: InterstitialAdLoadCallback(
-        //         onAdLoaded: (InterstitialAd ad) {
-        //           myInterstital = ad;
+            InterstitialAd.load(
+              adUnitId: intersticialID,
+              request: const AdRequest(),
+              adLoadCallback: InterstitialAdLoadCallback(
+                onAdLoaded: (InterstitialAd ad) {
+                  myInterstital = ad;
 
-        //           myInterstital.show();
+                  myInterstital.show();
 
-        //           myInterstital.fullScreenContentCallback =
-        //               FullScreenContentCallback(
-        //             onAdDismissedFullScreenContent: (ad) {
-        //               ad.dispose();
-        //               myInterstital.dispose();
+                  myInterstital.fullScreenContentCallback =
+                      FullScreenContentCallback(
+                    onAdDismissedFullScreenContent: (ad) {
+                      ad.dispose();
+                      myInterstital.dispose();
 
-        //               emit(PlayAudioState());
+                      emit(PlayAudioState());
 
-        //               audioPlay = audio.filePath;
+                      audioPlay = audio.filePath;
 
-        //               audioPlayer.play(AssetSource(audio.filePath));
+                      audioPlayer.play(AssetSource(audio.filePath));
 
-        //               audioPlayer.onPlayerComplete.listen((event) {
-        //                 emit(FinishAudioState());
-        //               });
-        //             },
-        //             onAdFailedToShowFullScreenContent: (ad, error) {
-        //               ad.dispose();
-        //               myInterstital.dispose();
-        //               debugPrint('Oi ${error.message}');
-        //             },
-        //           );
-        //         },
-        //         onAdFailedToLoad: (error) {
-        //           debugPrint('Oi 2 ${error.message}');
-        //         },
-        //       ),
-        //     );
-        //   }
+                      audioPlayer.onPlayerComplete.listen((event) {
+                        emit(FinishAudioState());
+                      });
+                    },
+                    onAdFailedToShowFullScreenContent: (ad, error) {
+                      ad.dispose();
+                      myInterstital.dispose();
+                      debugPrint('Oi ${error.message}');
+                    },
+                  );
+                },
+                onAdFailedToLoad: (error) {
+                  debugPrint('Oi 2 ${error.message}');
+                },
+              ),
+            );
+          }
 
-        //   contador = 0;
-        //   return;
-        // } else {
-        //   contador++;
-        // }
+          contador = 0;
+          return;
+        } else {
+          contador++;
+        }
 
         emit(PlayAudioState());
         audioPlay = audio.filePath;
