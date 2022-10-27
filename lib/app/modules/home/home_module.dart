@@ -3,6 +3,7 @@ import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/favorito_
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/lista_audios_module.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/meus_audios_module.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -46,6 +47,7 @@ class HomeModule extends Module {
   @override
   final List<Module> imports = [
     ListaAudioModule(),
+    MeusAudiosModule(),
     FavoritoModule(),
   ];
 
@@ -73,6 +75,7 @@ class HomeModule extends Module {
       child: ((context, args) => const HomePage()),
       children: [
         configuraModule('/lista', module: ListaAudioModule()),
+        configuraModule('/meus_audios', module: MeusAudiosModule()),
         configuraModule('/favorito', module: FavoritoModule()),
       ],
     ),

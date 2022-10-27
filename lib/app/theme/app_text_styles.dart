@@ -26,7 +26,7 @@ abstract class AppTextStyles {
   TextStyle get valorResumoVendas;
   TextStyle get totalGeralClienteCRCP;
   TextStyle get titleTotalGeralCRCP;
-  TextStyle get titleResumoFp;
+  TextStyle get titleModal;
   TextStyle get labelButtonLogin;
   TextStyle get labelMinutesAudioPlayer;
 }
@@ -171,7 +171,7 @@ class AppTextStylesDefault implements AppTextStyles {
       );
 
   @override
-  TextStyle get titleResumoFp => GoogleFonts.montserrat(
+  TextStyle get titleModal => GoogleFonts.montserrat(
         fontSize: 16,
         color: Colors.black,
         fontWeight: FontWeight.bold,

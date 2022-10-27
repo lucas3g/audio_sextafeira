@@ -125,6 +125,17 @@ mixin _$AudioStore on _AudioStoreBase, Store {
       ActionController(name: '_AudioStoreBase', context: context);
 
   @override
+  void setSpeedAudio() {
+    final _$actionInfo = _$_AudioStoreBaseActionController.startAction(
+        name: '_AudioStoreBase.setSpeedAudio');
+    try {
+      return super.setSpeedAudio();
+    } finally {
+      _$_AudioStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   bool verificaFavorito(Audio audio) {
     final _$actionInfo = _$_AudioStoreBaseActionController.startAction(
         name: '_AudioStoreBase.verificaFavorito');

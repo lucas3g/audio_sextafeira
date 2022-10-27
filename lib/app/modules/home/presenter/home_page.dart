@@ -86,8 +86,22 @@ class _HomePageState extends State<HomePage> {
                     color: AppTheme.colors.primary,
                   ),
                   Visibility(
-                    visible: _currentIndex == 1,
+                    visible: _currentIndex != 0,
                     child: const Text('Audios'),
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.add_circle,
+                    size: 20,
+                    color: AppTheme.colors.primary,
+                  ),
+                  Visibility(
+                    visible: _currentIndex != 1,
+                    child: const Text('Meus Audios'),
                   ),
                 ],
               ),
@@ -100,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                     color: AppTheme.colors.primary,
                   ),
                   Visibility(
-                    visible: _currentIndex == 0,
+                    visible: _currentIndex != 2,
                     child: const Text('Favoritos'),
                   ),
                 ],
@@ -115,6 +129,12 @@ class _HomePageState extends State<HomePage> {
 
               if (index == 0) {
                 Modular.to.pushReplacementNamed('../lista/');
+
+                return;
+              }
+
+              if (index == 1) {
+                Modular.to.pushReplacementNamed('../meus_audios/');
 
                 return;
               }
