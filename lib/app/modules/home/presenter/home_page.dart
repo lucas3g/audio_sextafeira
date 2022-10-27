@@ -57,7 +57,8 @@ class _HomePageState extends State<HomePage> {
         children: [
           Observer(builder: (context) {
             return Visibility(
-              visible: audioStore.state is PlayAudioState,
+              visible: audioStore.state is PlayAudioState ||
+                  audioStore.state is PauseAudioState,
               child: AudioPlayerBottomWidget(audioStore: audioStore),
             );
           }),

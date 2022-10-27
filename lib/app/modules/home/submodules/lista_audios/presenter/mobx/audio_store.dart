@@ -39,6 +39,9 @@ abstract class _AudioStoreBase with Store {
   String audioPlay = '';
 
   @observable
+  bool set2x = false;
+
+  @observable
   int contador = 0;
 
   AudioStates get state => _state;
@@ -50,11 +53,12 @@ abstract class _AudioStoreBase with Store {
   @action
   Future<void> playAudio(Audio audio) async {
     try {
+      set2x = false;
       audioPlayer.setPlaybackRate(1.0);
 
       if (audioPlay != audio.filePath) {
-        if (contador == 2) {
-          if (!Platform.isWindows) {
+        if (!Platform.isWindows) {
+          if (contador == 2) {
             if (state is PlayAudioState) {
               audioPlayer.stop();
               emit(StopAudioState());
@@ -97,12 +101,11 @@ abstract class _AudioStoreBase with Store {
                 },
               ),
             );
+            contador = 0;
+            return;
+          } else {
+            contador++;
           }
-
-          contador = 0;
-          return;
-        } else {
-          contador++;
         }
 
         emit(PlayAudioState());
@@ -128,9 +131,31 @@ abstract class _AudioStoreBase with Store {
   }
 
   @action
+  void setSpeedAudio() {
+    if (set2x) {
+      audioPlayer.setPlaybackRate(1.0);
+    } else {
+      audioPlayer.setPlaybackRate(2.0);
+    }
+
+    set2x = !set2x;
+  }
+
+  @action
   Future stopAudio() async {
     await audioPlayer.stop();
     emit(StopAudioState());
+  }
+
+  @action
+  Future pauseResumeAudio() async {
+    if (state is PauseAudioState) {
+      await audioPlayer.resume();
+      emit(PlayAudioState());
+      return;
+    }
+    await audioPlayer.pause();
+    emit(PauseAudioState());
   }
 
   @action

@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 class AudioPlayerBottomWidget extends StatefulWidget {
   final AudioStore audioStore;
@@ -17,11 +20,12 @@ class AudioPlayerBottomWidget extends StatefulWidget {
       _AudioPlayerBottomWidgetState();
 }
 
-class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget> {
+class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animation;
+
   Duration? _duration;
   Duration? _position;
-
-  bool set2x = false;
 
   StreamSubscription? _durationSubscription;
   StreamSubscription? _positionSubscription;
@@ -30,6 +34,25 @@ class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget> {
 
   String get _durationText => _duration?.toString().split('.').first ?? '';
   String get _positionText => _position?.toString().split('.').first ?? '';
+
+  @override
+  void initState() {
+    _animation = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+
+    super.initState();
+
+    _initStreams();
+
+    autorun((_) {
+      if (widget.audioStore.state is PauseAudioState) {
+        _animation.forward();
+      }
+      if (widget.audioStore.state is PlayAudioState) {
+        _animation.reverse();
+      }
+    });
+  }
 
   void _initStreams() {
     _durationSubscription =
@@ -57,12 +80,6 @@ class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget> {
     if (mounted) {
       super.setState(fn);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initStreams();
   }
 
   @override
@@ -119,29 +136,25 @@ class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget> {
                         : '',
                 style: AppTheme.textStyles.labelButtonLogin,
               ),
-              SizedBox(
-                height: 30,
-                child: VerticalDivider(
-                  color: AppTheme.colors.primary,
+              const SizedBox(width: 10),
+              IconButton(
+                onPressed: widget.audioStore.pauseResumeAudio,
+                icon: AnimatedIcon(
+                  icon: AnimatedIcons.pause_play,
+                  progress: _animation,
                 ),
+                color: AppTheme.colors.primary,
               ),
-              InkWell(
-                onTap: () {
-                  if (set2x) {
-                    widget.audioStore.audioPlayer.setPlaybackRate(1.0);
-                  } else {
-                    widget.audioStore.audioPlayer.setPlaybackRate(2.0);
-                  }
-
-                  setState(() {
-                    set2x = !set2x;
-                  });
-                },
-                child: Text(
-                  set2x ? '1x' : '2x',
-                  style: AppTheme.textStyles.labelButtonLogin,
-                ),
-              )
+              const SizedBox(width: 10),
+              Observer(builder: (context) {
+                return InkWell(
+                  onTap: widget.audioStore.setSpeedAudio,
+                  child: Text(
+                    widget.audioStore.set2x ? '1x' : '2x',
+                    style: AppTheme.textStyles.labelButtonLogin,
+                  ),
+                );
+              })
             ],
           ),
         ],

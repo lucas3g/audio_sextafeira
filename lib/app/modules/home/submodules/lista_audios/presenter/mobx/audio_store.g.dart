@@ -41,6 +41,22 @@ mixin _$AudioStore on _AudioStoreBase, Store {
     });
   }
 
+  late final _$set2xAtom =
+      Atom(name: '_AudioStoreBase.set2x', context: context);
+
+  @override
+  bool get set2x {
+    _$set2xAtom.reportRead();
+    return super.set2x;
+  }
+
+  @override
+  set set2x(bool value) {
+    _$set2xAtom.reportWrite(value, super.set2x, () {
+      super.set2x = value;
+    });
+  }
+
   late final _$contadorAtom =
       Atom(name: '_AudioStoreBase.contador', context: context);
 
@@ -71,6 +87,14 @@ mixin _$AudioStore on _AudioStoreBase, Store {
   @override
   Future<dynamic> stopAudio() {
     return _$stopAudioAsyncAction.run(() => super.stopAudio());
+  }
+
+  late final _$pauseResumeAudioAsyncAction =
+      AsyncAction('_AudioStoreBase.pauseResumeAudio', context: context);
+
+  @override
+  Future<dynamic> pauseResumeAudio() {
+    return _$pauseResumeAudioAsyncAction.run(() => super.pauseResumeAudio());
   }
 
   late final _$shareAudioAsyncAction =
@@ -115,6 +139,7 @@ mixin _$AudioStore on _AudioStoreBase, Store {
   String toString() {
     return '''
 audioPlay: ${audioPlay},
+set2x: ${set2x},
 contador: ${contador}
     ''';
   }

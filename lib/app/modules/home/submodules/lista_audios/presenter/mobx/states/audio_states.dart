@@ -8,6 +8,8 @@ class FinishAudioState extends AudioStates {}
 
 class StopAudioState extends AudioStates {}
 
+class PauseAudioState extends AudioStates {}
+
 class ErrorAudioState extends AudioStates {
   final String message;
 
