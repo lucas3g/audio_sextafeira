@@ -51,7 +51,7 @@ class CoreModule extends Module {
           tables: {table},
         );
 
-        service.init(param);
+        await service.init(param);
 
         return service;
       },
