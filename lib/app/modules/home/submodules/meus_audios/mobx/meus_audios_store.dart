@@ -5,9 +5,7 @@ import 'dart:io';
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
-import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
-import 'package:path_provider/path_provider.dart';
 part 'meus_audios_store.g.dart';
 
 class MeusAudiosStore = _MeusAudiosStoreBase with _$MeusAudiosStore;
@@ -39,18 +37,13 @@ abstract class _MeusAudiosStoreBase with Store {
   Future saveAudio() async {
     try {
       if (file.path.isNotEmpty) {
-        ByteData audioByte = await rootBundle.load(file.path);
+        final audio = await file.readAsBytes();
 
-        final temp = await getTemporaryDirectory();
+        final name = file.path.split('\\').last.split('.').first;
 
-        final name = file.path.split('/').last;
+        final result = await FileSaver.instance.saveFile(name, audio, 'mp3');
 
-        final path = '${temp.path}/$name';
-
-        final result = await FileSaver.instance
-            .saveFile(path, audioByte.buffer.asUint8List(), 'mp3');
-
-        if (result.isNotEmpty) {
+        if (!result.contains('Something went wrong')) {
           MySnackBar(message: 'Audio salvo com sucesso!');
         } else {
           MySnackBar(message: 'Erro ao tentar salvar audio!');

@@ -1,3 +1,7 @@
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/table_entity.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_service.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'services/shared_preferences/local_storage_interface.dart';
@@ -30,6 +34,27 @@ class CoreModule extends Module {
     ),
     Bind<ILocalStorage>(
       ((i) => SharedPreferencesService(sharedPreferences: i())),
+      export: true,
+    ),
+    AsyncBind<ISQLFliteStorage>(
+      (i) async {
+        final service = SQLFliteService();
+        final fields = {
+          const TableFieldEntity(name: 'id', type: FieldType.integer, pk: true),
+          const TableFieldEntity(name: 'title', type: FieldType.string),
+          const TableFieldEntity(name: 'path_file', type: FieldType.string),
+        };
+        final table = TableEntity(name: 'meus_audios', fields: fields);
+
+        final param = SQLFliteInitParam(
+          fileName: 'audios.db',
+          tables: {table},
+        );
+
+        service.init(param);
+
+        return service;
+      },
       export: true,
     ),
   ];
