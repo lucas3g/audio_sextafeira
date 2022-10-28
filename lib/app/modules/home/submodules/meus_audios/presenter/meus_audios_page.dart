@@ -1,3 +1,4 @@
+import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/states/meus_audios_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -60,19 +61,34 @@ class _MeusAudiosPageState extends State<MeusAudiosPage> {
               ),
             ),
             Observer(builder: (context) {
-              final audios = widget.store.listAudios;
+              final state = widget.store.state;
 
-              if (audios.isEmpty) {
-                return const Center(
-                  child: Text('Nenhum audio encontrado'),
+              if (state is LoadingMeusAudiosStates) {
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
                 );
               }
 
-              audios.sort((a, b) => b.id.compareTo(a.id));
+              final audios = widget.store.listAudios;
+
+              if (audios.isEmpty) {
+                return Expanded(
+                  child: Center(
+                    child: Text(
+                      'Nenhum audio encontrado.',
+                      style: AppTheme.textStyles.titleAppBar,
+                    ),
+                  ),
+                );
+              }
 
               return Expanded(
                 child: GridView.builder(
-                  padding: const EdgeInsets.only(bottom: 15),
+                  padding: const EdgeInsets.only(top: 10, bottom: 15),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 0.56,
                     crossAxisCount: 3,
@@ -98,13 +114,15 @@ class _MeusAudiosPageState extends State<MeusAudiosPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
         elevation: 10,
-        onPressed: () {
-          showDialog(
+        onPressed: () async {
+          await showDialog(
             context: context,
             builder: (context) {
               return ModalAddAudioWidget(store: widget.store);
             },
           );
+
+          await widget.store.getAllAudiosDB();
         },
         child: Icon(
           Icons.add,

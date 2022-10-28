@@ -59,16 +59,25 @@ abstract class _MeusAudiosStoreBase with Store {
   }
 
   @action
-  Future saveAudio() async {
+  Future saveAudio(String title) async {
     try {
       if (file.path.isNotEmpty) {
         final audio = await file.readAsBytes();
 
-        final name = file.path.split('\\').last.split('.').first;
+        final name = file.path.split('/').last.split('.').first;
 
         final result = await FileSaver.instance.saveFile(name, audio, 'mp3');
 
         if (!result.contains('Something went wrong')) {
+          final params = SQLFliteInsertParam(
+            table: Tables.meus_audios,
+            data: {
+              'title': title,
+              'path_file': result,
+            },
+          );
+
+          await db.create(params);
           MySnackBar(message: 'Audio salvo com sucesso!');
         } else {
           MySnackBar(message: 'Erro ao tentar salvar audio!');
@@ -87,7 +96,11 @@ abstract class _MeusAudiosStoreBase with Store {
 
       final result = await db.getAll(params);
 
+      await Future.delayed(const Duration(milliseconds: 300));
+
       final List<Audio> list = List.from(result.map(Audio.toEntity).toList());
+
+      list.sort((a, b) => b.id.compareTo(a.id));
 
       listAudios = ObservableList.of(list);
 

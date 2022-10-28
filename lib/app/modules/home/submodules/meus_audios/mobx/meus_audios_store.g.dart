@@ -69,8 +69,8 @@ mixin _$MeusAudiosStore on _MeusAudiosStoreBase, Store {
       AsyncAction('_MeusAudiosStoreBase.saveAudio', context: context);
 
   @override
-  Future<dynamic> saveAudio() {
-    return _$saveAudioAsyncAction.run(() => super.saveAudio());
+  Future<dynamic> saveAudio(String title) {
+    return _$saveAudioAsyncAction.run(() => super.saveAudio(title));
   }
 
   late final _$getAllAudiosDBAsyncAction =

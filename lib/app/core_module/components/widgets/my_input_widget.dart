@@ -71,6 +71,14 @@ class _MyInputWidgetState extends State<MyInputWidget> {
       textCapitalization: widget.textCapitalization,
       textInputAction: widget.textInputAction,
       validator: (value) {
+        if (value == null || value.isEmpty) {
+          if (widget.label == 'Titulo') {
+            return widget.campoVazio;
+          }
+
+          return '${widget.label} campo vazio';
+        }
+
         return null;
       },
       focusNode: widget.focusNode,

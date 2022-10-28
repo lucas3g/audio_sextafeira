@@ -83,7 +83,11 @@ abstract class _AudioStoreBase with Store {
 
                       audioPlay = audio.filePath;
 
-                      audioPlayer.play(AssetSource(audio.filePath));
+                      if (audioPlay.contains('audios')) {
+                        audioPlayer.play(AssetSource(audio.filePath));
+                      } else {
+                        audioPlayer.play(DeviceFileSource(audio.filePath));
+                      }
 
                       audioPlayer.onPlayerComplete.listen((event) {
                         emit(FinishAudioState());
@@ -110,7 +114,12 @@ abstract class _AudioStoreBase with Store {
 
         emit(PlayAudioState());
         audioPlay = audio.filePath;
-        audioPlayer.play(AssetSource(audio.filePath));
+
+        if (audio.assets) {
+          audioPlayer.play(AssetSource(audio.filePath));
+        } else {
+          audioPlayer.play(DeviceFileSource(audio.filePath));
+        }
 
         audioPlayer.onPlayerComplete.listen((event) {
           emit(FinishAudioState());
@@ -118,7 +127,12 @@ abstract class _AudioStoreBase with Store {
       } else {
         if (state is StopAudioState) {
           emit(PlayAudioState());
-          audioPlayer.play(AssetSource(audio.filePath));
+
+          if (audio.assets) {
+            audioPlayer.play(AssetSource(audio.filePath));
+          } else {
+            audioPlayer.play(DeviceFileSource(audio.filePath));
+          }
 
           return;
         }
