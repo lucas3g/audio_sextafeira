@@ -6,6 +6,7 @@ import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/table
 import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
 import 'package:audio_sextafeira/app/utils/constants.dart';
+import 'package:audio_sextafeira/app/utils/formatters.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -42,7 +43,7 @@ class _SplashPageState extends State<SplashPage> {
           data: {
             'title': audio.name,
             'path_file': audio.filePath,
-            'button_color': randomColor().value,
+            'button_color': audio.buttonColor.toHex(),
             'assets': 1,
             'favorito': 0,
           },

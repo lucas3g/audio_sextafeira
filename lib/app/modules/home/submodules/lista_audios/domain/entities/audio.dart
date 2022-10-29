@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
+import 'package:audio_sextafeira/app/utils/formatters.dart';
 import 'package:flutter/animation.dart';
 
 class Audio {
@@ -24,8 +24,7 @@ class Audio {
       id: int.parse(map['id'].toString()),
       name: map['title'],
       filePath: map['path_file'],
-      buttonColor: Color(
-          int.tryParse(map['buttonColor'].toString()) ?? randomColor().value),
+      buttonColor: ConvertHexColor(map['button_color']),
       assets: int.parse(map['assets'].toString()) == 0 ? false : true,
       favorito: int.parse(map['favorito'].toString()) == 0 ? false : true,
     );

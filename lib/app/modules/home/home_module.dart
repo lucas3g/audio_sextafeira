@@ -5,6 +5,7 @@ import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/lista_
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/get_audios_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/meus_audios_module.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -70,6 +71,10 @@ class HomeModule extends Module {
 
     Bind.singleton<GetAudiosStore>(
       (i) => GetAudiosStore(db: i()),
+    ),
+
+    Bind.singleton<MeusAudiosStore>(
+      (i) => MeusAudiosStore(db: i()),
     ),
   ];
 

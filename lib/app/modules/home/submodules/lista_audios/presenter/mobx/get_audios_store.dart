@@ -45,6 +45,8 @@ abstract class _GetAudiosStoreBase with Store {
 
       final result = await db.getPerFilter(params);
 
+      await Future.delayed(const Duration(milliseconds: 300));
+
       final List<Audio> list = List.from(result.map(Audio.toEntity).toList());
 
       list.sort((a, b) => b.id.compareTo(a.id));

@@ -8,11 +8,7 @@ class MeusAudiosModule extends Module {
   final List<Module> imports = [];
 
   @override
-  final List<Bind> binds = [
-    Bind.singleton<MeusAudiosStore>(
-      (i) => MeusAudiosStore(db: i()),
-    ),
-  ];
+  final List<Bind> binds = [];
 
   @override
   final List<ModularRoute> routes = [

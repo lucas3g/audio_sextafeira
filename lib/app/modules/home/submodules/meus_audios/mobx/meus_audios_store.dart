@@ -2,12 +2,14 @@
 
 import 'dart:io';
 
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/filter_entity.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/tables.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/domain/entities/audio.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/states/meus_audios_states.dart';
+import 'package:audio_sextafeira/app/utils/formatters.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:mobx/mobx.dart';
@@ -75,6 +77,9 @@ abstract class _MeusAudiosStoreBase with Store {
             data: {
               'title': title,
               'path_file': result,
+              'button_color': randomColor().toHex(),
+              'assets': 0,
+              'favorito': 0,
             },
           );
 

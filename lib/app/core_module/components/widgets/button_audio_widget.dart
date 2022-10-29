@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/get_audios_store.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -30,6 +31,7 @@ class ButtonAudioWidget extends StatefulWidget {
 class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   final favoritoStore = Modular.get<FavoritoStore>();
   final getAudioStore = Modular.get<GetAudiosStore>();
+  final meusAudioStore = Modular.get<MeusAudiosStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +101,8 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
                           await widget.audioStore.favoritar(widget.audio);
 
                           await getAudioStore.getAllAudiosDB();
+
+                          await meusAudioStore.getAllAudiosDB();
 
                           await favoritoStore.getFavoritos();
                         },

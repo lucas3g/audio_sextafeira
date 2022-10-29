@@ -53,7 +53,9 @@ class _ListaAudiosPageState extends State<ListaAudiosPage> {
 
                 if (state is GetLoadingAudioState) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
                   );
                 }
 
