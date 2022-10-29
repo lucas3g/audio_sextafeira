@@ -1,6 +1,12 @@
 import 'package:audio_sextafeira/app/app_module.dart';
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/filter_entity.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/tables.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
 import 'package:audio_sextafeira/app/utils/constants.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -12,10 +18,50 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  Future carregaDados() async {
+    BotToast.showText(
+      text: 'Carregando audios',
+      duration: const Duration(seconds: 5),
+    );
+    BotToast.showLoading(align: Alignment.bottomCenter);
+
+    final db = Modular.get<ISQLFliteStorage>();
+
+    for (var audio in listAudios) {
+      final filters =
+          FilterEntity(name: 'id', value: audio.id, type: FilterType.equal);
+
+      final getParams = SQLFliteGetPerFilterParam(
+          table: Tables.meus_audios, filters: {filters});
+
+      final result = await db.getPerFilter(getParams);
+
+      if (result.isEmpty) {
+        final params = SQLFliteInsertParam(
+          table: Tables.meus_audios,
+          data: {
+            'title': audio.name,
+            'path_file': audio.filePath,
+            'button_color': randomColor().value,
+            'assets': 1,
+            'favorito': 0,
+          },
+        );
+
+        await db.create(params);
+      }
+    }
+  }
+
   Future init() async {
     await Modular.isModuleReady<AppModule>();
 
+    await carregaDados();
+
     await Future.delayed(const Duration(seconds: 2));
+
+    BotToast.closeAllLoading();
+    BotToast.cleanAll();
 
     Modular.to.navigate('/home/');
   }

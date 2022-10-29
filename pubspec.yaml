@@ -56,6 +56,7 @@ dependencies:
   file_saver: ^0.1.1
   sqflite: ^2.2.0+2
   equatable: ^2.0.5
+  bot_toast: ^4.0.3
 
 
 dev_dependencies:

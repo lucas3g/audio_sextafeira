@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/filter_entity.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/tables.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
@@ -59,7 +60,7 @@ abstract class _MeusAudiosStoreBase with Store {
   }
 
   @action
-  Future saveAudio(String title) async {
+  Future<bool> saveAudio(String title) async {
     try {
       if (file.path.isNotEmpty) {
         final audio = await file.readAsBytes();
@@ -79,12 +80,16 @@ abstract class _MeusAudiosStoreBase with Store {
 
           await db.create(params);
           MySnackBar(message: 'Audio salvo com sucesso!');
+          return true;
         } else {
           MySnackBar(message: 'Erro ao tentar salvar audio!');
+          return false;
         }
       }
+      return false;
     } catch (e) {
       MySnackBar(message: e.toString());
+      return false;
     }
   }
 
@@ -92,11 +97,14 @@ abstract class _MeusAudiosStoreBase with Store {
   Future getAllAudiosDB() async {
     try {
       emit(LoadingMeusAudiosStates());
-      final params = SQLFliteGetAllParam(table: Tables.meus_audios);
 
-      final result = await db.getAll(params);
+      const filters =
+          FilterEntity(name: 'assets', value: 0, type: FilterType.equal);
 
-      await Future.delayed(const Duration(milliseconds: 300));
+      final params = SQLFliteGetPerFilterParam(
+          table: Tables.meus_audios, filters: {filters});
+
+      final result = await db.getPerFilter(params);
 
       final List<Audio> list = List.from(result.map(Audio.toEntity).toList());
 

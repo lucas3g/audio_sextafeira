@@ -1,10 +1,10 @@
-import 'dart:convert';
-
-import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/filter_entity.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/tables.dart';
+import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/states/favorito_states.dart';
 import 'package:mobx/mobx.dart';
 
-import 'package:audio_sextafeira/app/core_module/services/shared_preferences/local_storage_interface.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/domain/entities/audio.dart';
 
 part 'favorito_mobx.g.dart';
@@ -12,10 +12,10 @@ part 'favorito_mobx.g.dart';
 class FavoritoStore = _FavoritoStoreBase with _$FavoritoStore;
 
 abstract class _FavoritoStoreBase with Store {
-  final ILocalStorage localStorage;
+  final ISQLFliteStorage db;
 
   _FavoritoStoreBase({
-    required this.localStorage,
+    required this.db,
   });
 
   @observable
@@ -31,23 +31,25 @@ abstract class _FavoritoStoreBase with Store {
   }
 
   @action
-  Future<void> loadFav() async {
+  Future getFavoritos() async {
     try {
       emit(LoadingFavoritoState());
 
-      audiosFav.clear();
+      const filters =
+          FilterEntity(name: 'favorito', value: 1, type: FilterType.equal);
 
-      if (localStorage.getData('listAudios') != null) {
-        final list = jsonDecode(localStorage.getData('listAudios')) as List;
+      final params = SQLFliteGetPerFilterParam(
+          table: Tables.meus_audios, filters: {filters});
 
-        for (var audio in listAudios) {
-          if (list.contains(audio.id)) {
-            audiosFav.add(audio);
-          }
-        }
+      final result = await db.getPerFilter(params);
 
-        emit(SuccessLoadListState());
-      }
+      final List<Audio> list = List.from(result.map(Audio.toEntity).toList());
+
+      list.sort((a, b) => b.id.compareTo(a.id));
+
+      audiosFav = ObservableList.of(list);
+
+      emit(SuccessLoadListState());
     } catch (e) {
       emit(ErrorLoadListState(message: e.toString()));
     }

@@ -31,6 +31,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/emilde.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 7,
@@ -38,6 +39,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/somaimedia.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 7,
@@ -45,6 +47,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/maismediodia.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 6,
@@ -52,6 +55,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/uhulbomdia.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 5,
@@ -59,6 +63,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/faltamuitosexta.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 4,
@@ -66,6 +71,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/taoprontogole.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 3,
@@ -73,6 +79,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/chegouasextadiabedo.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 2,
@@ -80,6 +87,7 @@ final List<Audio> listAudios = [
     filePath: 'audios/ehgurizadasextafeira.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
   Audio(
     id: 1,
@@ -87,5 +95,6 @@ final List<Audio> listAudios = [
     filePath: 'audios/aituacordopia.mp3',
     buttonColor: randomColor(),
     assets: true,
+    favorito: false,
   ),
 ];

@@ -3,6 +3,7 @@ import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/favorito_
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/lista_audios_module.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/get_audios_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/meus_audios_module.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,11 +61,15 @@ class HomeModule extends Module {
 
     //Mobx
     Bind.singleton<AudioStore>(
-      (i) => AudioStore(audioPlayer: i(), localStorage: i()),
+      (i) => AudioStore(audioPlayer: i(), db: i()),
     ),
 
     Bind.singleton<FavoritoStore>(
-      (i) => FavoritoStore(localStorage: i()),
+      (i) => FavoritoStore(db: i()),
+    ),
+
+    Bind.singleton<GetAudiosStore>(
+      (i) => GetAudiosStore(db: i()),
     ),
   ];
 

@@ -17,3 +17,19 @@ class ErrorAudioState extends AudioStates {
     required this.message,
   });
 }
+
+abstract class GetAudioStates {}
+
+class GetInitialAudioState extends GetAudioStates {}
+
+class GetLoadingAudioState extends GetAudioStates {}
+
+class GetSuccesAudioState extends GetAudioStates {}
+
+class GetErrorAudioState extends GetAudioStates {
+  final String message;
+
+  GetErrorAudioState({
+    required this.message,
+  });
+}

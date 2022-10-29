@@ -1,17 +1,21 @@
-import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
-import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
-import 'package:audio_sextafeira/app/core_module/components/widgets/button_audio_widget.dart';
-import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:flutter/material.dart';
-
-import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+
+import 'package:audio_sextafeira/app/core_module/components/widgets/button_audio_widget.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/get_audios_store.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
+import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 
 class ListaAudiosPage extends StatefulWidget {
   final AudioStore audioStore;
+  final GetAudiosStore getAudiosStore;
+
   const ListaAudiosPage({
     Key? key,
     required this.audioStore,
+    required this.getAudiosStore,
   }) : super(key: key);
 
   @override
@@ -19,9 +23,15 @@ class ListaAudiosPage extends StatefulWidget {
 }
 
 class _ListaAudiosPageState extends State<ListaAudiosPage> {
+  Future getAudiosDB() async {
+    await widget.getAudiosStore.getAllAudiosDB();
+  }
+
   @override
   void initState() {
     super.initState();
+
+    getAudiosDB();
 
     autorun((_) {
       if (widget.audioStore.state is ErrorAudioState) {
@@ -29,12 +39,6 @@ class _ListaAudiosPageState extends State<ListaAudiosPage> {
       }
     });
   }
-
-  // @override
-  // void dispose() {
-  //   Modular.get<AudioPlayer>().dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -44,26 +48,37 @@ class _ListaAudiosPageState extends State<ListaAudiosPage> {
         child: Column(
           children: [
             Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.only(bottom: 15),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.56,
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                itemCount: listAudios.length,
-                itemBuilder: (context, index) {
-                  listAudios.sort((a, b) => b.id.compareTo(a.id));
+              child: Observer(builder: (context) {
+                final state = widget.getAudiosStore.state;
 
-                  final audio = listAudios[index];
-                  return ButtonAudioWidget(
-                    audio: audio,
-                    audioStore: widget.audioStore,
-                    index: index,
+                if (state is GetLoadingAudioState) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
-                },
-              ),
+                }
+
+                final audios = widget.getAudiosStore.listAudios;
+
+                return GridView.builder(
+                  padding: const EdgeInsets.only(bottom: 15),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.56,
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                  ),
+                  itemCount: audios.length,
+                  itemBuilder: (context, index) {
+                    final audio = audios[index];
+
+                    return ButtonAudioWidget(
+                      audio: audio,
+                      audioStore: widget.audioStore,
+                      index: index,
+                    );
+                  },
+                );
+              }),
             )
           ],
         ),

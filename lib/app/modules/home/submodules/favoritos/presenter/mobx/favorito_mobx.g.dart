@@ -41,12 +41,12 @@ mixin _$FavoritoStore on _FavoritoStoreBase, Store {
     });
   }
 
-  late final _$loadFavAsyncAction =
-      AsyncAction('_FavoritoStoreBase.loadFav', context: context);
+  late final _$getFavoritosAsyncAction =
+      AsyncAction('_FavoritoStoreBase.getFavoritos', context: context);
 
   @override
-  Future<void> loadFav() {
-    return _$loadFavAsyncAction.run(() => super.loadFav());
+  Future<dynamic> getFavoritos() {
+    return _$getFavoritosAsyncAction.run(() => super.getFavoritos());
   }
 
   @override

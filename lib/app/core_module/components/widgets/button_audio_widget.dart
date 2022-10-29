@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:audio_sextafeira/app/core_module/services/shared_preferences/local_storage_interface.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/get_audios_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -29,12 +29,7 @@ class ButtonAudioWidget extends StatefulWidget {
 
 class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   final favoritoStore = Modular.get<FavoritoStore>();
-  final localStorage = Modular.get<ILocalStorage>();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final getAudioStore = Modular.get<GetAudiosStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +48,6 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
       ),
       child: Observer(builder: (_) {
         final state = widget.audioStore.state;
-
-        final favorito = widget.audioStore.verificaFavorito(widget.audio);
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,23 +96,14 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
                       ),
                       IconButton(
                         onPressed: () async {
-                          if (favorito) {
-                            await widget.audioStore
-                                .removeFavorito(widget.audio);
-
-                            await favoritoStore.loadFav();
-
-                            setState(() {});
-                            return;
-                          }
                           await widget.audioStore.favoritar(widget.audio);
 
-                          await favoritoStore.loadFav();
+                          await getAudioStore.getAllAudiosDB();
 
-                          setState(() {});
+                          await favoritoStore.getFavoritos();
                         },
                         icon: Icon(
-                          favorito
+                          widget.audio.favorito
                               ? Icons.star_outlined
                               : Icons.star_border_outlined,
                           color: AppTheme.colors.primary,

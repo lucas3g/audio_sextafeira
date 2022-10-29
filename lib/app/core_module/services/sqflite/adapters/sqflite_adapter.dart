@@ -24,11 +24,23 @@ class SQLFliteInitParam {
 
 class SQLFliteDeleteParam {
   final Tables table;
-  final String id;
+  final int id;
 
   SQLFliteDeleteParam({
     required this.table,
     required this.id,
+  });
+}
+
+class SQLFliteUpdateParam {
+  final Tables table;
+  final int id;
+  final int favorito;
+
+  SQLFliteUpdateParam({
+    required this.table,
+    required this.id,
+    required this.favorito,
   });
 }
 

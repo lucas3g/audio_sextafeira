@@ -76,7 +76,9 @@ class _ModalAddAudioWidgetState extends State<ModalAddAudioWidget> {
                         return;
                       }
 
-                      await widget.store.saveAudio(tituloController.text);
+                      if (await widget.store.saveAudio(tituloController.text)) {
+                        Navigator.pop(context);
+                      }
                     },
                     child: const Text('Salvar'),
                   ),

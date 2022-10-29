@@ -87,4 +87,16 @@ class SQLFliteService implements ISQLFliteStorage {
       },
     );
   }
+
+  @override
+  Future<void> update(SQLFliteUpdateParam param) async {
+    await _db!.transaction((txn) async {
+      await txn.update(
+        param.table.name,
+        {'favorito': param.favorito},
+        where: 'id = ?',
+        whereArgs: [param.id],
+      );
+    });
+  }
 }

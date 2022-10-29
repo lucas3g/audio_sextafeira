@@ -113,14 +113,6 @@ mixin _$AudioStore on _AudioStoreBase, Store {
     return _$favoritarAsyncAction.run(() => super.favoritar(audio));
   }
 
-  late final _$removeFavoritoAsyncAction =
-      AsyncAction('_AudioStoreBase.removeFavorito', context: context);
-
-  @override
-  Future<void> removeFavorito(Audio audio) {
-    return _$removeFavoritoAsyncAction.run(() => super.removeFavorito(audio));
-  }
-
   late final _$_AudioStoreBaseActionController =
       ActionController(name: '_AudioStoreBase', context: context);
 
@@ -130,17 +122,6 @@ mixin _$AudioStore on _AudioStoreBase, Store {
         name: '_AudioStoreBase.setSpeedAudio');
     try {
       return super.setSpeedAudio();
-    } finally {
-      _$_AudioStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  bool verificaFavorito(Audio audio) {
-    final _$actionInfo = _$_AudioStoreBaseActionController.startAction(
-        name: '_AudioStoreBase.verificaFavorito');
-    try {
-      return super.verificaFavorito(audio);
     } finally {
       _$_AudioStoreBaseActionController.endAction(_$actionInfo);
     }

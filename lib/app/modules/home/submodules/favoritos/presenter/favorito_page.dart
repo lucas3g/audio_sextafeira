@@ -23,7 +23,7 @@ class _FavoritoPageState extends State<FavoritoPage> {
   final audioStore = Modular.get<AudioStore>();
 
   Future loadFav() async {
-    await widget.favoritoStore.loadFav();
+    await widget.favoritoStore.getFavoritos();
   }
 
   @override

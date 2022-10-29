@@ -39,16 +39,22 @@ class CoreModule extends Module {
     AsyncBind<ISQLFliteStorage>(
       (i) async {
         final service = SQLFliteService();
-        final fields = {
+
+        final meusAudiosfields = {
           const TableFieldEntity(name: 'id', type: FieldType.integer, pk: true),
           const TableFieldEntity(name: 'title', type: FieldType.string),
           const TableFieldEntity(name: 'path_file', type: FieldType.string),
+          const TableFieldEntity(name: 'button_color', type: FieldType.string),
+          const TableFieldEntity(name: 'assets', type: FieldType.integer),
+          const TableFieldEntity(name: 'favorito', type: FieldType.integer),
         };
-        final table = TableEntity(name: 'meus_audios', fields: fields);
+
+        final meusAudios =
+            TableEntity(name: 'meus_audios', fields: meusAudiosfields);
 
         final param = SQLFliteInitParam(
           fileName: 'audios.db',
-          tables: {table},
+          tables: {meusAudios},
         );
 
         await service.init(param);
