@@ -4,7 +4,9 @@ import 'package:audio_sextafeira/app/core_module/components/widgets/audio_player
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
+import 'package:audio_sextafeira/app/utils/constants.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -18,9 +20,17 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late int _currentIndex = 0;
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   final AudioStore audioStore = Modular.get<AudioStore>();
+  final meusAudiosStore = Modular.get<MeusAudiosStore>();
+
+  late final AnimationController _animationController = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 600));
+
+  late final Animation<Offset> _animation =
+      Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0))
+          .animate(_animationController);
 
   final BannerAd myBanner = BannerAd(
     adUnitId: bannerID,
@@ -50,6 +60,27 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         elevation: 5,
         shadowColor: Colors.black,
+        actions: [
+          Observer(builder: (context) {
+            return Visibility(
+              visible: Constants.currentIndex == 1,
+              child: IconButton(
+                onPressed: () async {
+                  meusAudiosStore.clicouPesquisar();
+                  if (!meusAudiosStore.pesquisar) {
+                    _animationController.reverse();
+                  } else {
+                    _animationController.forward();
+                  }
+                },
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+            );
+          }),
+        ],
       ),
       body: const RouterOutlet(),
       bottomNavigationBar: Column(
@@ -72,7 +103,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 10),
           ],
           CurvedNavigationBar(
-            index: _currentIndex,
+            index: Constants.currentIndex,
             height: 60,
             color: Colors.white,
             backgroundColor: AppTheme.colors.primary,
@@ -86,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                     color: AppTheme.colors.primary,
                   ),
                   Visibility(
-                    visible: _currentIndex != 0,
+                    visible: Constants.currentIndex != 0,
                     child: const Text('Audios'),
                   ),
                 ],
@@ -100,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                     color: AppTheme.colors.primary,
                   ),
                   Visibility(
-                    visible: _currentIndex != 1,
+                    visible: Constants.currentIndex != 1,
                     child: const Text('Meus Audios'),
                   ),
                 ],
@@ -114,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                     color: AppTheme.colors.primary,
                   ),
                   Visibility(
-                    visible: _currentIndex != 2,
+                    visible: Constants.currentIndex != 2,
                     child: const Text('Favoritos'),
                   ),
                 ],
@@ -122,7 +153,7 @@ class _HomePageState extends State<HomePage> {
             ],
             onTap: (index) async {
               setState(() {
-                _currentIndex = index;
+                Constants.currentIndex = index;
               });
 
               await Modular.get<AudioStore>().stopAudio();
@@ -134,7 +165,9 @@ class _HomePageState extends State<HomePage> {
               }
 
               if (index == 1) {
-                Modular.to.pushReplacementNamed('../meus_audios/');
+                Modular.to.pushReplacementNamed('../meus_audios/', arguments: {
+                  'animation': _animation,
+                });
 
                 return;
               }

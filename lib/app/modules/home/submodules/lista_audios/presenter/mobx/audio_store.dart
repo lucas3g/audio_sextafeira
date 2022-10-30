@@ -190,7 +190,8 @@ abstract class _AudioStoreBase with Store {
     final params = SQLFliteUpdateParam(
       table: Tables.meus_audios,
       id: audio.id,
-      favorito: audio.favorito ? 0 : 1,
+      field: 'favorito',
+      value: audio.favorito ? 0 : 1,
     );
 
     await db.update(params);

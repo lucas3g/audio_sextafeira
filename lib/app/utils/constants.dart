@@ -1,14 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class Constants {
-  static String urlVendasDiarias = 'vendas/vendas';
-  static String urlVendasLucro = 'vendas/projecao';
-  static String urlVendasGrafico = 'vendas/grafico';
-  static String urlMovimento = 'movimento/saldo';
-  static String urlResumoFP = 'formaspag/resumo';
-  static String urlCR = 'contas/cr';
-  static String urlCP = 'contas/cp';
-  static String urlEstoque = 'mercadorias/estoque';
+  static int currentIndex = 0;
 }
 
 extension ContextExtensions on BuildContext {

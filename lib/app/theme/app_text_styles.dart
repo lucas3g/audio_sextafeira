@@ -7,7 +7,7 @@ abstract class AppTextStyles {
   TextStyle get button;
   TextStyle get titleAppBar;
   TextStyle get titleSplash;
-  TextStyle get titleNumeroViagem;
+  TextStyle get labelFileAudio;
   TextStyle get titleEstoque;
   TextStyle get titleViagem;
   TextStyle get titleImageNaoEncontrada;
@@ -49,8 +49,11 @@ class AppTextStylesDefault implements AppTextStyles {
       fontWeight: FontWeight.w700);
 
   @override
-  TextStyle get titleNumeroViagem =>
-      GoogleFonts.montserrat(fontSize: 14, color: Colors.black);
+  TextStyle get labelFileAudio => GoogleFonts.montserrat(
+        fontSize: 14,
+        color: AppTheme.colors.primary,
+        fontWeight: FontWeight.bold,
+      );
 
   @override
   TextStyle get titleEstoque => GoogleFonts.montserrat(

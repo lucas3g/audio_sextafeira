@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/get_audios_store.dart';
-import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -9,7 +7,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/favoritos/presenter/mobx/favorito_mobx.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/domain/entities/audio.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/get_audios_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
+import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
 import 'package:audio_sextafeira/app/utils/constants.dart';
 
@@ -111,6 +111,22 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
                               ? Icons.star_outlined
                               : Icons.star_border_outlined,
                           color: AppTheme.colors.primary,
+                        ),
+                      ),
+                      Visibility(
+                        visible:
+                            !widget.audio.assets && Constants.currentIndex == 1,
+                        child: IconButton(
+                          onPressed: () async {
+                            await meusAudioStore.deleteAudio(widget.audio);
+                          },
+                          icon: Icon(
+                            meusAudioStore.clicouDeletar &&
+                                    widget.audio.id == meusAudioStore.idAudio
+                                ? Icons.done
+                                : Icons.delete_outline_rounded,
+                            color: AppTheme.colors.primary,
+                          ),
                         ),
                       ),
                     ],

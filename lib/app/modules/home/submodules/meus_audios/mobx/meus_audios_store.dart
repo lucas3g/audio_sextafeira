@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
@@ -15,6 +16,7 @@ import 'package:file_saver/file_saver.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
+import 'package:uuid/uuid.dart';
 
 part 'meus_audios_store.g.dart';
 
@@ -28,6 +30,15 @@ abstract class _MeusAudiosStoreBase with Store {
   });
 
   @observable
+  late bool clicouDeletar = false;
+
+  @observable
+  late bool pesquisar = false;
+
+  @observable
+  late File file = File('');
+
+  @observable
   ObservableList<Audio> listAudios = ObservableList.of([]);
 
   @observable
@@ -38,9 +49,6 @@ abstract class _MeusAudiosStoreBase with Store {
   emit(MeusAudiosStates state) {
     _state = state;
   }
-
-  @observable
-  late File file = File('');
 
   @action
   Future procurarAudio() async {
@@ -67,7 +75,7 @@ abstract class _MeusAudiosStoreBase with Store {
       if (file.path.isNotEmpty) {
         final audio = await file.readAsBytes();
 
-        final name = file.path.split('/').last.split('.').first;
+        final name = const Uuid().v1().substring(1, 10);
 
         final result = await FileSaver.instance.saveFile(name, audio, 'mp3');
 
@@ -85,15 +93,19 @@ abstract class _MeusAudiosStoreBase with Store {
 
           await db.create(params);
           MySnackBar(message: 'Audio salvo com sucesso!');
+          file = File('');
           return true;
         } else {
           MySnackBar(message: 'Erro ao tentar salvar audio!');
+          file = File('');
           return false;
         }
       }
+      MySnackBar(message: 'Selecione um audio.');
       return false;
     } catch (e) {
       MySnackBar(message: e.toString());
+      file = File('');
       return false;
     }
   }
@@ -121,5 +133,66 @@ abstract class _MeusAudiosStoreBase with Store {
     } catch (e) {
       emit(ErrorMeusAudiosStates(message: e.toString()));
     }
+  }
+
+  @observable
+  int idAudio = 0;
+
+  @action
+  Future deleteAudio(Audio audio) async {
+    try {
+      if (!clicouDeletar) {
+        idAudio = audio.id;
+        clicouDeletar = true;
+
+        Timer(const Duration(seconds: 2), () {
+          clicouDeletar = false;
+          idAudio = 0;
+        });
+
+        return;
+      }
+
+      clicouDeletar = false;
+
+      if (!clicouDeletar) {
+        final param =
+            SQLFliteDeleteParam(table: Tables.meus_audios, id: audio.id);
+
+        await db.delete(param);
+
+        await File(audio.filePath).delete();
+
+        idAudio = 0;
+
+        getAllAudiosDB();
+      }
+    } catch (e) {
+      idAudio = 0;
+      MySnackBar(message: e.toString());
+    }
+  }
+
+  @action
+  void clicouPesquisar() {
+    pesquisar = !pesquisar;
+  }
+
+  @observable
+  String title = '';
+
+  @computed
+  ObservableList<Audio> get filtredList {
+    if (title.isEmpty) {
+      return listAudios;
+    }
+
+    return ObservableList.of(listAudios
+        .where(
+          (audio) => (audio.name.toLowerCase().removeAcentos().contains(
+                title.toLowerCase().removeAcentos(),
+              )),
+        )
+        .toList());
   }
 }

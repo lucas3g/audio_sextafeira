@@ -57,6 +57,7 @@ dependencies:
   sqflite: ^2.2.0+2
   equatable: ^2.0.5
   bot_toast: ^4.0.3
+  uuid: ^3.0.6
 
 
 dev_dependencies:

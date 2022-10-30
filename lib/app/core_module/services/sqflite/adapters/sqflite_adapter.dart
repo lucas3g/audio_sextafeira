@@ -35,12 +35,14 @@ class SQLFliteDeleteParam {
 class SQLFliteUpdateParam {
   final Tables table;
   final int id;
-  final int favorito;
+  final String field;
+  final dynamic value;
 
   SQLFliteUpdateParam({
     required this.table,
     required this.id,
-    required this.favorito,
+    required this.field,
+    required this.value,
   });
 }
 

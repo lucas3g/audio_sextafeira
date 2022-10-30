@@ -41,6 +41,7 @@ class _SplashPageState extends State<SplashPage> {
         final params = SQLFliteInsertParam(
           table: Tables.meus_audios,
           data: {
+            'id': audio.id,
             'title': audio.name,
             'path_file': audio.filePath,
             'button_color': audio.buttonColor.toHex(),
@@ -50,6 +51,15 @@ class _SplashPageState extends State<SplashPage> {
         );
 
         await db.create(params);
+      } else {
+        final param = SQLFliteUpdateParam(
+          table: Tables.meus_audios,
+          id: audio.id,
+          field: 'button_color',
+          value: randomColor().toHex(),
+        );
+
+        await db.update(param);
       }
     }
   }

@@ -93,7 +93,7 @@ class SQLFliteService implements ISQLFliteStorage {
     await _db!.transaction((txn) async {
       await txn.update(
         param.table.name,
-        {'favorito': param.favorito},
+        {param.field: param.value},
         where: 'id = ?',
         whereArgs: [param.id],
       );
