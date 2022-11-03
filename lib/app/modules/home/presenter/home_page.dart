@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:audience_network/ad/banner_ad.dart';
 import 'package:audio_sextafeira/app/core_module/components/widgets/audio_player_bottom_widget.dart';
-import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
@@ -97,7 +96,7 @@ class _HomePageState extends State<HomePage>
             Container(
               alignment: const Alignment(0.5, 1),
               child: BannerAd(
-                placementId: bannerID,
+                placementId: BannerAd.testPlacementId,
                 bannerSize: BannerSize.STANDARD,
                 listener: BannerAdListener(
                   onError: (code, message) => print('error'),

@@ -1,19 +1,17 @@
-import 'package:audio_sextafeira/app/core_module/components/widgets/my_input_widget.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/states/meus_audios_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'package:audio_sextafeira/app/core_module/components/widgets/button_audio_widget.dart';
+import 'package:audio_sextafeira/app/core_module/components/widgets/my_input_widget.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/presenter/widgets/modal_add_audio_widget.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 
 class MeusAudiosPage extends StatefulWidget {
   final MeusAudiosStore store;
   final AudioStore audioStore;
-
   const MeusAudiosPage({
     Key? key,
     required this.store,
@@ -24,13 +22,10 @@ class MeusAudiosPage extends StatefulWidget {
   State<MeusAudiosPage> createState() => _MeusAudiosPageState();
 }
 
-class _MeusAudiosPageState extends State<MeusAudiosPage>
-    with SingleTickerProviderStateMixin {
+class _MeusAudiosPageState extends State<MeusAudiosPage> {
   final searchController = TextEditingController();
 
   final fPesquisa = FocusNode();
-
-  final Animation<Offset> _animation = Modular.args.data['animation'];
 
   Future getAllAudios() async {
     await widget.store.getAllAudiosDB();
@@ -50,31 +45,21 @@ class _MeusAudiosPageState extends State<MeusAudiosPage>
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: Column(
           children: [
-            Observer(builder: (context) {
-              return Visibility(
-                visible: widget.store.pesquisar,
-                child: SlideTransition(
-                  position: _animation,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: MyInputWidget(
-                      focusNode: fPesquisa,
-                      hintText: 'Digite o titulo do audio',
-                      label: 'Pesquisar',
-                      textEditingController: searchController,
-                      onChanged: (String? value) async {
-                        widget.store.title = value!;
-                      },
-                    ),
-                  ),
-                ),
-              );
-            }),
+            Container(
+              padding: const EdgeInsets.all(10),
+              alignment: Alignment.center,
+              height: 70,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: MyInputWidget(
+                focusNode: fPesquisa,
+                hintText: 'Digite o titulo do audio',
+                label: 'Pesquisar',
+                textEditingController: searchController,
+              ),
+            ),
             Observer(builder: (context) {
               final state = widget.store.state;
 
@@ -88,7 +73,7 @@ class _MeusAudiosPageState extends State<MeusAudiosPage>
                 );
               }
 
-              final audios = widget.store.filtredList;
+              final audios = widget.store.listAudios;
 
               if (audios.isEmpty) {
                 return Expanded(
@@ -105,7 +90,8 @@ class _MeusAudiosPageState extends State<MeusAudiosPage>
                 child: GridView.builder(
                   padding: const EdgeInsets.only(top: 10, bottom: 15),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    childAspectRatio: 0.56,
+                    crossAxisCount: 3,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
                   ),
