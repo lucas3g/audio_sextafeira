@@ -2,15 +2,12 @@
 
 import 'dart:io';
 
-import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/tables.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -25,7 +22,6 @@ class AudioStore = _AudioStoreBase with _$AudioStore;
 abstract class _AudioStoreBase with Store {
   final AudioPlayer audioPlayer;
   final ISQLFliteStorage db;
-  late InterstitialAd myInterstital;
 
   _AudioStoreBase({
     required this.audioPlayer,
@@ -64,47 +60,47 @@ abstract class _AudioStoreBase with Store {
               emit(StopAudioState());
             }
 
-            InterstitialAd.load(
-              adUnitId: intersticialID,
-              request: const AdRequest(),
-              adLoadCallback: InterstitialAdLoadCallback(
-                onAdLoaded: (InterstitialAd ad) {
-                  myInterstital = ad;
+            // InterstitialAd.load(
+            //   adUnitId: intersticialID,
+            //   request: const AdRequest(),
+            //   adLoadCallback: InterstitialAdLoadCallback(
+            //     onAdLoaded: (InterstitialAd ad) {
+            //       myInterstital = ad;
 
-                  myInterstital.show();
+            //       myInterstital.show();
 
-                  myInterstital.fullScreenContentCallback =
-                      FullScreenContentCallback(
-                    onAdDismissedFullScreenContent: (ad) {
-                      ad.dispose();
-                      myInterstital.dispose();
+            //       myInterstital.fullScreenContentCallback =
+            //           FullScreenContentCallback(
+            //         onAdDismissedFullScreenContent: (ad) {
+            //           ad.dispose();
+            //           myInterstital.dispose();
 
-                      emit(PlayAudioState());
+            //           emit(PlayAudioState());
 
-                      audioPlay = audio.filePath;
+            //           audioPlay = audio.filePath;
 
-                      if (audioPlay.contains('audios')) {
-                        audioPlayer.play(AssetSource(audio.filePath));
-                      } else {
-                        audioPlayer.play(DeviceFileSource(audio.filePath));
-                      }
+            //           if (audioPlay.contains('audios')) {
+            //             audioPlayer.play(AssetSource(audio.filePath));
+            //           } else {
+            //             audioPlayer.play(DeviceFileSource(audio.filePath));
+            //           }
 
-                      audioPlayer.onPlayerComplete.listen((event) {
-                        emit(FinishAudioState());
-                      });
-                    },
-                    onAdFailedToShowFullScreenContent: (ad, error) {
-                      ad.dispose();
-                      myInterstital.dispose();
-                      debugPrint('Oi ${error.message}');
-                    },
-                  );
-                },
-                onAdFailedToLoad: (error) {
-                  debugPrint('Oi 2 ${error.message}');
-                },
-              ),
-            );
+            //           audioPlayer.onPlayerComplete.listen((event) {
+            //             emit(FinishAudioState());
+            //           });
+            //         },
+            //         onAdFailedToShowFullScreenContent: (ad, error) {
+            //           ad.dispose();
+            //           myInterstital.dispose();
+            //           debugPrint('Oi ${error.message}');
+            //         },
+            //       );
+            //     },
+            //     onAdFailedToLoad: (error) {
+            //       debugPrint('Oi 2 ${error.message}');
+            //     },
+            //   ),
+            // );
             contador = 0;
             return;
           } else {

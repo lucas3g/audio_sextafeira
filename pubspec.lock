@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
+  audience_network:
+    dependency: "direct main"
+    description:
+      name: audience_network
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   audioplayers:
     dependency: "direct main"
     description:
@@ -401,13 +408,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  google_mobile_ads:
-    dependency: "direct main"
-    description:
-      name: google_mobile_ads
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
   graphs:
     dependency: transitive
     description:
@@ -952,13 +952,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  visibility_detector:
-    dependency: transitive
-    description:
-      name: visibility_detector
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.3"
   watcher:
     dependency: transitive
     description:
