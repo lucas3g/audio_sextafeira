@@ -2,6 +2,8 @@
 
 import 'dart:io';
 
+import 'package:audience_network/audience_network.dart';
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/tables.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
@@ -60,47 +62,33 @@ abstract class _AudioStoreBase with Store {
               emit(StopAudioState());
             }
 
-            // InterstitialAd.load(
-            //   adUnitId: intersticialID,
-            //   request: const AdRequest(),
-            //   adLoadCallback: InterstitialAdLoadCallback(
-            //     onAdLoaded: (InterstitialAd ad) {
-            //       myInterstital = ad;
+            final ad = InterstitialAd(intersticialID);
 
-            //       myInterstital.show();
+            ad.listener = InterstitialAdListener(
+              onDismissed: () {
+                ad.destroy();
 
-            //       myInterstital.fullScreenContentCallback =
-            //           FullScreenContentCallback(
-            //         onAdDismissedFullScreenContent: (ad) {
-            //           ad.dispose();
-            //           myInterstital.dispose();
+                emit(PlayAudioState());
 
-            //           emit(PlayAudioState());
+                audioPlay = audio.filePath;
 
-            //           audioPlay = audio.filePath;
+                if (audioPlay.contains('audios')) {
+                  audioPlayer.play(AssetSource(audio.filePath));
+                } else {
+                  audioPlayer.play(DeviceFileSource(audio.filePath));
+                }
 
-            //           if (audioPlay.contains('audios')) {
-            //             audioPlayer.play(AssetSource(audio.filePath));
-            //           } else {
-            //             audioPlayer.play(DeviceFileSource(audio.filePath));
-            //           }
+                audioPlayer.onPlayerComplete.listen((event) {
+                  emit(FinishAudioState());
+                });
+              },
+              onLoaded: () {
+                ad.show();
+              },
+            );
 
-            //           audioPlayer.onPlayerComplete.listen((event) {
-            //             emit(FinishAudioState());
-            //           });
-            //         },
-            //         onAdFailedToShowFullScreenContent: (ad, error) {
-            //           ad.dispose();
-            //           myInterstital.dispose();
-            //           debugPrint('Oi ${error.message}');
-            //         },
-            //       );
-            //     },
-            //     onAdFailedToLoad: (error) {
-            //       debugPrint('Oi 2 ${error.message}');
-            //     },
-            //   ),
-            // );
+            ad.load();
+
             contador = 0;
             return;
           } else {

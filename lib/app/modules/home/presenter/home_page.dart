@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:audience_network/ad/banner_ad.dart';
+import 'package:audience_network/audience_network.dart';
 import 'package:audio_sextafeira/app/core_module/components/widgets/audio_player_bottom_widget.dart';
+import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/states/audio_states.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
@@ -42,6 +43,12 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
 
+    if (!Platform.isWindows) {
+      AudienceNetwork.init(
+        iOSAdvertiserTrackingEnabled: true,
+      );
+    }
+
     // if (!Platform.isWindows) {
     //   myBanner.load();
     // }
@@ -60,25 +67,23 @@ class _HomePageState extends State<HomePage>
         elevation: 5,
         shadowColor: Colors.black,
         actions: [
-          Observer(builder: (context) {
-            return Visibility(
-              visible: Constants.currentIndex == 1,
-              child: IconButton(
-                onPressed: () async {
-                  meusAudiosStore.clicouPesquisar();
-                  if (!meusAudiosStore.pesquisar) {
-                    _animationController.reverse();
-                  } else {
-                    _animationController.forward();
-                  }
-                },
-                icon: const Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ),
+          Visibility(
+            visible: Constants.currentIndex == 1,
+            child: IconButton(
+              onPressed: () async {
+                meusAudiosStore.clicouPesquisar();
+                if (!meusAudiosStore.pesquisar) {
+                  _animationController.reverse();
+                } else {
+                  _animationController.forward();
+                }
+              },
+              icon: const Icon(
+                Icons.search,
+                color: Colors.white,
               ),
-            );
-          }),
+            ),
+          ),
         ],
       ),
       body: const RouterOutlet(),
@@ -96,13 +101,10 @@ class _HomePageState extends State<HomePage>
             Container(
               alignment: const Alignment(0.5, 1),
               child: BannerAd(
-                placementId: BannerAd.testPlacementId,
+                placementId: bannerID,
                 bannerSize: BannerSize.STANDARD,
                 listener: BannerAdListener(
-                  onError: (code, message) => print('error'),
-                  onLoaded: () => print('loaded'),
-                  onClicked: () => print('clicked'),
-                  onLoggingImpression: () => print('logging impression'),
+                  onError: (code, message) => print(message),
                 ),
               ),
             ),
