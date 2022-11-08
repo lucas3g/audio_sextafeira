@@ -17,6 +17,38 @@ mixin _$MeusAudiosStore on _MeusAudiosStoreBase, Store {
               name: '_MeusAudiosStoreBase.filtredList'))
       .value;
 
+  late final _$tituloAtom =
+      Atom(name: '_MeusAudiosStoreBase.titulo', context: context);
+
+  @override
+  String get titulo {
+    _$tituloAtom.reportRead();
+    return super.titulo;
+  }
+
+  @override
+  set titulo(String value) {
+    _$tituloAtom.reportWrite(value, super.titulo, () {
+      super.titulo = value;
+    });
+  }
+
+  late final _$fileNameAudioAtom =
+      Atom(name: '_MeusAudiosStoreBase.fileNameAudio', context: context);
+
+  @override
+  String get fileNameAudio {
+    _$fileNameAudioAtom.reportRead();
+    return super.fileNameAudio;
+  }
+
+  @override
+  set fileNameAudio(String value) {
+    _$fileNameAudioAtom.reportWrite(value, super.fileNameAudio, () {
+      super.fileNameAudio = value;
+    });
+  }
+
   late final _$clicouDeletarAtom =
       Atom(name: '_MeusAudiosStoreBase.clicouDeletar', context: context);
 
@@ -113,19 +145,19 @@ mixin _$MeusAudiosStore on _MeusAudiosStoreBase, Store {
     });
   }
 
-  late final _$titleAtom =
-      Atom(name: '_MeusAudiosStoreBase.title', context: context);
+  late final _$filtroAtom =
+      Atom(name: '_MeusAudiosStoreBase.filtro', context: context);
 
   @override
-  String get title {
-    _$titleAtom.reportRead();
-    return super.title;
+  String get filtro {
+    _$filtroAtom.reportRead();
+    return super.filtro;
   }
 
   @override
-  set title(String value) {
-    _$titleAtom.reportWrite(value, super.title, () {
-      super.title = value;
+  set filtro(String value) {
+    _$filtroAtom.reportWrite(value, super.filtro, () {
+      super.filtro = value;
     });
   }
 
@@ -161,6 +193,23 @@ mixin _$MeusAudiosStore on _MeusAudiosStoreBase, Store {
     return _$deleteAudioAsyncAction.run(() => super.deleteAudio(audio));
   }
 
+  late final _$getDadosAudioAsyncAction =
+      AsyncAction('_MeusAudiosStoreBase.getDadosAudio', context: context);
+
+  @override
+  Future<dynamic> getDadosAudio(int idAudio) {
+    return _$getDadosAudioAsyncAction.run(() => super.getDadosAudio(idAudio));
+  }
+
+  late final _$changeTitleAsyncAction =
+      AsyncAction('_MeusAudiosStoreBase.changeTitle', context: context);
+
+  @override
+  Future<dynamic> changeTitle(int idAudio, String title) {
+    return _$changeTitleAsyncAction
+        .run(() => super.changeTitle(idAudio, title));
+  }
+
   late final _$_MeusAudiosStoreBaseActionController =
       ActionController(name: '_MeusAudiosStoreBase', context: context);
 
@@ -178,12 +227,14 @@ mixin _$MeusAudiosStore on _MeusAudiosStoreBase, Store {
   @override
   String toString() {
     return '''
+titulo: ${titulo},
+fileNameAudio: ${fileNameAudio},
 clicouDeletar: ${clicouDeletar},
 pesquisar: ${pesquisar},
 file: ${file},
 listAudios: ${listAudios},
 idAudio: ${idAudio},
-title: ${title},
+filtro: ${filtro},
 filtredList: ${filtredList}
     ''';
   }

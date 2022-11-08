@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/presenter/widgets/modal_add_audio_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -111,6 +112,29 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
                               ? Icons.star_outlined
                               : Icons.star_border_outlined,
                           color: AppTheme.colors.primary,
+                        ),
+                      ),
+                      Visibility(
+                        visible:
+                            !widget.audio.assets && Constants.currentIndex == 1,
+                        child: IconButton(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) {
+                                return ModalAddAudioWidget(
+                                  store: meusAudioStore,
+                                  idAudio: widget.audio.id,
+                                );
+                              },
+                            );
+
+                            await meusAudioStore.getAllAudiosDB();
+                          },
+                          icon: Icon(
+                            Icons.edit_outlined,
+                            color: AppTheme.colors.primary,
+                          ),
                         ),
                       ),
                       Visibility(

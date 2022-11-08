@@ -26,7 +26,7 @@ Color randomColor() {
 
 final List<Audio> listAudios = [
   Audio(
-    id: 8,
+    id: -9,
     name: 'Eu tenho rainike, band',
     filePath: 'audios/emilde.mp3',
     buttonColor: randomColor(),
@@ -34,7 +34,7 @@ final List<Audio> listAudios = [
     favorito: false,
   ),
   Audio(
-    id: 7,
+    id: -8,
     name: 'Só mai mei dia',
     filePath: 'audios/somaimedia.mp3',
     buttonColor: randomColor(),
@@ -42,7 +42,7 @@ final List<Audio> listAudios = [
     favorito: false,
   ),
   Audio(
-    id: 7,
+    id: -7,
     name: 'Mais meio dia!!',
     filePath: 'audios/maismediodia.mp3',
     buttonColor: randomColor(),
@@ -50,7 +50,7 @@ final List<Audio> listAudios = [
     favorito: false,
   ),
   Audio(
-    id: 6,
+    id: -6,
     name: 'Uhuul bom dia',
     filePath: 'audios/uhulbomdia.mp3',
     buttonColor: randomColor(),
@@ -58,7 +58,7 @@ final List<Audio> listAudios = [
     favorito: false,
   ),
   Audio(
-    id: 5,
+    id: -5,
     name: 'Falta muito pra chegar sexta?',
     filePath: 'audios/faltamuitosexta.mp3',
     buttonColor: randomColor(),
@@ -74,7 +74,7 @@ final List<Audio> listAudios = [
     favorito: false,
   ),
   Audio(
-    id: 3,
+    id: -3,
     name: 'Chegou a sexta diabedo',
     filePath: 'audios/chegouasextadiabedo.mp3',
     buttonColor: randomColor(),
@@ -82,7 +82,7 @@ final List<Audio> listAudios = [
     favorito: false,
   ),
   Audio(
-    id: 2,
+    id: -2,
     name: 'É gurizada sexta-feira',
     filePath: 'audios/ehgurizadasextafeira.mp3',
     buttonColor: randomColor(),
@@ -90,7 +90,7 @@ final List<Audio> listAudios = [
     favorito: false,
   ),
   Audio(
-    id: 1,
+    id: -1,
     name: 'Ai tu acordo pia',
     filePath: 'audios/aituacordopia.mp3',
     buttonColor: randomColor(),

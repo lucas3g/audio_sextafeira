@@ -30,6 +30,12 @@ abstract class _MeusAudiosStoreBase with Store {
   });
 
   @observable
+  late String titulo = '';
+
+  @observable
+  late String fileNameAudio = '';
+
+  @observable
   late bool clicouDeletar = false;
 
   @observable
@@ -155,7 +161,7 @@ abstract class _MeusAudiosStoreBase with Store {
 
       clicouDeletar = false;
 
-      if (!clicouDeletar) {
+      if (!clicouDeletar && idAudio == audio.id) {
         final param =
             SQLFliteDeleteParam(table: Tables.meus_audios, id: audio.id);
 
@@ -179,20 +185,48 @@ abstract class _MeusAudiosStoreBase with Store {
   }
 
   @observable
-  String title = '';
+  String filtro = '';
 
   @computed
   ObservableList<Audio> get filtredList {
-    if (title.isEmpty) {
+    if (filtro.isEmpty) {
       return listAudios;
     }
 
     return ObservableList.of(listAudios
         .where(
           (audio) => (audio.name.toLowerCase().removeAcentos().contains(
-                title.toLowerCase().removeAcentos(),
+                filtro.toLowerCase().removeAcentos(),
               )),
         )
         .toList());
+  }
+
+  @action
+  Future getDadosAudio(int idAudio) async {
+    final filters =
+        FilterEntity(name: 'id', value: idAudio, type: FilterType.equal);
+
+    final params = SQLFliteGetPerFilterParam(
+        table: Tables.meus_audios, filters: {filters});
+
+    final result = await db.getPerFilter(params);
+
+    if (result.isNotEmpty) {
+      titulo = result[0]['title'];
+      fileNameAudio = result[0]['path_file'];
+    }
+  }
+
+  @action
+  Future changeTitle(int idAudio, String title) async {
+    final params = SQLFliteUpdateParam(
+      table: Tables.meus_audios,
+      id: idAudio,
+      field: 'title',
+      value: title,
+    );
+
+    await db.update(params);
   }
 }
