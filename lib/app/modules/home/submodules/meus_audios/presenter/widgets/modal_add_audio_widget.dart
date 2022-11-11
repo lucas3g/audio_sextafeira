@@ -72,22 +72,26 @@ class _ModalAddAudioWidgetState extends State<ModalAddAudioWidget> {
                 campoVazio: 'Titulo não pode ser em branco',
               ),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+              Visibility(
+                visible: widget.store.file.path.split('/').last.isEmpty &&
+                    filePath.isEmpty,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
+                        onPressed: () async {
+                          await widget.store.procurarAudio();
+                        },
+                        child: const Text('Procurar audio'),
                       ),
-                      onPressed: () async {
-                        await widget.store.procurarAudio();
-                      },
-                      child: const Text('Procurar audio'),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Visibility(
                 visible: filePath.isNotEmpty,

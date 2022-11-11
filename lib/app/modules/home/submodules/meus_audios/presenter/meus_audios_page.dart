@@ -101,7 +101,7 @@ class _MeusAudiosPageState extends State<MeusAudiosPage> {
                 child: GridView.builder(
                   padding: const EdgeInsets.only(top: 10, bottom: 15),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.9,
+                    childAspectRatio: 0.85,
                     crossAxisCount: 2,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,

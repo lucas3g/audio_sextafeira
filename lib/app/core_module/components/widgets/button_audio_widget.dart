@@ -37,7 +37,7 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -81,82 +81,81 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
             ),
-            Column(
-              children: [
-                const Divider(),
-                FittedBox(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          await widget.audioStore.shareAudio(widget.audio);
-                        },
-                        icon: Icon(
-                          Icons.whatsapp_rounded,
-                          color: AppTheme.colors.primary,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          await widget.audioStore.favoritar(widget.audio);
-
-                          await getAudioStore.getAllAudiosDB();
-
-                          await meusAudioStore.getAllAudiosDB();
-
-                          await favoritoStore.getFavoritos();
-                        },
-                        icon: Icon(
-                          widget.audio.favorito
-                              ? Icons.star_outlined
-                              : Icons.star_border_outlined,
-                          color: AppTheme.colors.primary,
-                        ),
-                      ),
-                      Visibility(
-                        visible:
-                            !widget.audio.assets && Constants.currentIndex == 1,
-                        child: IconButton(
-                          onPressed: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return ModalAddAudioWidget(
-                                  store: meusAudioStore,
-                                  idAudio: widget.audio.id,
-                                );
-                              },
-                            );
-
-                            await meusAudioStore.getAllAudiosDB();
-                          },
-                          icon: Icon(
-                            Icons.edit_outlined,
-                            color: AppTheme.colors.primary,
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible:
-                            !widget.audio.assets && Constants.currentIndex == 1,
-                        child: IconButton(
-                          onPressed: () async {
-                            await meusAudioStore.deleteAudio(widget.audio);
-                          },
-                          icon: Icon(
-                            meusAudioStore.clicouDeletar &&
-                                    widget.audio.id == meusAudioStore.idAudio
-                                ? Icons.done
-                                : Icons.delete_outline_rounded,
-                            color: AppTheme.colors.primary,
-                          ),
-                        ),
-                      ),
-                    ],
+            const Divider(),
+            SizedBox(
+              height: Constants.currentIndex != 1 ? 50 : 70,
+              child: GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                childAspectRatio: 2,
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      await widget.audioStore.shareAudio(widget.audio);
+                    },
+                    icon: Icon(
+                      Icons.whatsapp_rounded,
+                      color: AppTheme.colors.primary,
+                    ),
                   ),
-                ),
-              ],
+                  IconButton(
+                    onPressed: () async {
+                      await widget.audioStore.favoritar(widget.audio);
+
+                      await getAudioStore.getAllAudiosDB();
+
+                      await meusAudioStore.getAllAudiosDB();
+
+                      await favoritoStore.getFavoritos();
+                    },
+                    icon: Icon(
+                      widget.audio.favorito
+                          ? Icons.star_outlined
+                          : Icons.star_border_outlined,
+                      color: AppTheme.colors.primary,
+                    ),
+                  ),
+                  Visibility(
+                    visible:
+                        !widget.audio.assets && Constants.currentIndex == 1,
+                    child: IconButton(
+                      onPressed: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ModalAddAudioWidget(
+                              store: meusAudioStore,
+                              idAudio: widget.audio.id,
+                            );
+                          },
+                        );
+
+                        await meusAudioStore.getAllAudiosDB();
+                      },
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        color: AppTheme.colors.primary,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible:
+                        !widget.audio.assets && Constants.currentIndex == 1,
+                    child: IconButton(
+                      onPressed: () async {
+                        await meusAudioStore.deleteAudio(widget.audio);
+                      },
+                      icon: Icon(
+                        meusAudioStore.clicouDeletar &&
+                                widget.audio.id == meusAudioStore.idAudio
+                            ? Icons.done
+                            : Icons.delete_outline_rounded,
+                        color: AppTheme.colors.primary,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         );
