@@ -37,7 +37,7 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 15),
+      padding: const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -75,19 +75,27 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
                 ),
               ),
             ),
-            Text(
-              widget.audio.name,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-            ),
+            Constants.currentIndex == 1
+                ? Text(
+                    widget.audio.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  )
+                : Expanded(
+                    child: Text(
+                      widget.audio.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
             const Divider(),
-            SizedBox(
-              height: Constants.currentIndex != 1 ? 50 : 70,
+            Expanded(
               child: GridView.count(
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                childAspectRatio: 2,
+                childAspectRatio: Constants.currentIndex == 1 ? 2 : 1.2,
                 children: [
                   IconButton(
                     onPressed: () async {

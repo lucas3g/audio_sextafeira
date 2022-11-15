@@ -70,6 +70,7 @@ class _ModalAddAudioWidgetState extends State<ModalAddAudioWidget> {
                 label: 'Titulo',
                 textEditingController: tituloController,
                 campoVazio: 'Titulo não pode ser em branco',
+                maxLength: 20,
               ),
               const SizedBox(height: 10),
               Visibility(

@@ -56,7 +56,7 @@ class _MeusAudiosPageState extends State<MeusAudiosPage> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     alignment: Alignment.center,
-                    height: 70,
+                    height: 80,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -66,6 +66,9 @@ class _MeusAudiosPageState extends State<MeusAudiosPage> {
                       hintText: 'Digite o titulo do audio',
                       label: 'Pesquisar',
                       textEditingController: searchController,
+                      onChanged: (v) {
+                        widget.store.filtro = v!;
+                      },
                     ),
                   ),
                 ),
@@ -84,7 +87,7 @@ class _MeusAudiosPageState extends State<MeusAudiosPage> {
                 );
               }
 
-              final audios = widget.store.listAudios;
+              final audios = widget.store.filtredList;
 
               if (audios.isEmpty) {
                 return Expanded(

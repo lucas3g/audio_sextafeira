@@ -96,7 +96,6 @@ class _MyInputWidgetState extends State<MyInputWidget> {
       maxLength: widget.maxLength,
       controller: widget.textEditingController,
       decoration: InputDecoration(
-        counterText: '',
         hintText: widget.hintText,
         label: Text(widget.label),
         suffixIcon: widget.suffixIcon,
