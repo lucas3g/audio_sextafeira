@@ -10,6 +10,8 @@ Future<void> main() async {
 
   await initializeDateFormatting(await findSystemLocale(), '');
 
+  //teste
+
   runApp(
     ModularApp(
       module: AppModule(),
