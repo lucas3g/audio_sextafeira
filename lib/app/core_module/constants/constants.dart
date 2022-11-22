@@ -26,6 +26,22 @@ Color randomColor() {
 
 final List<Audio> listAudios = [
   Audio(
+    id: -11,
+    name: 'Começa a passa aquela adrenalina',
+    filePath: 'audios/comecaapassa.mp3',
+    buttonColor: randomColor(),
+    assets: true,
+    favorito: false,
+  ),
+  Audio(
+    id: -10,
+    name: 'Imagina uma sexta feira',
+    filePath: 'audios/imageumasexta.mp3',
+    buttonColor: randomColor(),
+    assets: true,
+    favorito: false,
+  ),
+  Audio(
     id: -9,
     name: 'Eu tenho rainike, band',
     filePath: 'audios/emilde.mp3',
