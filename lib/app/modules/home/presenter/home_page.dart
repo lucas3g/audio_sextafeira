@@ -46,6 +46,8 @@ class _HomePageState extends State<HomePage>
     if (!Platform.isWindows) {
       AudienceNetwork.init(
         iOSAdvertiserTrackingEnabled: true,
+        testingId: "c48a4002-1ed6-4821-baa1-641c1243ce5b", //optional
+        testMode: true,
       );
     }
 
@@ -104,6 +106,7 @@ class _HomePageState extends State<HomePage>
                 placementId: bannerID,
                 bannerSize: BannerSize.STANDARD,
                 listener: BannerAdListener(
+                  onLoaded: () => print('Ad carregou'),
                   onError: (code, message) => print(message),
                 ),
               ),
