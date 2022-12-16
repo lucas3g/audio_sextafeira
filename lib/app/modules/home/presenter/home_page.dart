@@ -44,7 +44,11 @@ class _HomePageState extends State<HomePage>
     super.initState();
 
     if (!Platform.isWindows) {
-      AudienceNetwork.init(iOSAdvertiserTrackingEnabled: true);
+      AudienceNetwork.init(
+        iOSAdvertiserTrackingEnabled: true,
+        // testingId: "c48a4002-1ed6-4821-baa1-641c1243ce5b", //optional
+        // testMode: true,
+      );
     }
 
     // if (!Platform.isWindows) {
@@ -60,7 +64,7 @@ class _HomePageState extends State<HomePage>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Audios para Sexta Feira'),
+        title: const Text('Sons Engraçados'),
         centerTitle: true,
         elevation: 5,
         shadowColor: Colors.black,
