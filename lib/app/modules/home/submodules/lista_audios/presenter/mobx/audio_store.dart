@@ -10,6 +10,7 @@ import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/table
 import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storage_interface.dart';
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
@@ -63,6 +64,8 @@ abstract class _AudioStoreBase with Store {
               emit(StopAudioState());
             }
 
+            BotToast.showLoading();
+
             final ad = InterstitialAd(intersticialID);
 
             ad.listener = InterstitialAdListener(
@@ -82,13 +85,17 @@ abstract class _AudioStoreBase with Store {
                 audioPlayer.onPlayerComplete.listen((event) {
                   emit(FinishAudioState());
                 });
+                BotToast.closeAllLoading();
               },
               onLoaded: () {
                 ad.show();
+                BotToast.closeAllLoading();
               },
             );
 
             ad.load();
+
+            BotToast.closeAllLoading();
 
             contador = 0;
             return;
