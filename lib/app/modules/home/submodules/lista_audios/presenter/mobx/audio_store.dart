@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use, library_private_types_in_public_api
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:audience_network/audience_network.dart';
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
@@ -158,22 +159,27 @@ abstract class _AudioStoreBase with Store {
 
   @action
   Future shareAudio(Audio audio) async {
-    MySnackBar(message: 'Carregando audio. Aguarde...');
+    try {
+      MySnackBar(message: 'Carregando audio. Aguarde...');
 
-    ByteData audioByte;
+      TypedData audioByte;
+      late String path;
 
-    if (audio.assets) {
-      audioByte = await rootBundle.load('assets/${audio.filePath}');
-    } else {
-      audioByte = await rootBundle.load(audio.filePath);
+      if (audio.assets) {
+        final temp = await getTemporaryDirectory();
+        path = '${temp.path}/${audio.filePath}';
+        audioByte = await rootBundle.load('assets/${audio.filePath}');
+      } else {
+        audioByte = await File(audio.filePath).readAsBytes();
+        path = audio.filePath;
+      }
+
+      File(path).writeAsBytesSync(audioByte.buffer.asUint8List());
+
+      await Share.shareFiles([path]);
+    } catch (e) {
+      MySnackBar(message: e.toString());
     }
-
-    final temp = await getTemporaryDirectory();
-    final path = '${temp.path}/${audio.filePath}';
-
-    File(path).writeAsBytesSync(audioByte.buffer.asUint8List());
-
-    await Share.shareFiles([path]);
   }
 
   @action
