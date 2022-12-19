@@ -11,6 +11,7 @@ import 'package:audio_sextafeira/app/core_module/services/sqflite/sqflite_storag
 import 'package:audio_sextafeira/app/utils/my_snackbar.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
@@ -64,7 +65,9 @@ abstract class _AudioStoreBase with Store {
               emit(StopAudioState());
             }
 
-            BotToast.showLoading();
+            BotToast.showLoading(backgroundColor: Colors.black38);
+
+            await Future.delayed(const Duration(milliseconds: 500));
 
             final ad = InterstitialAd(intersticialID);
 
@@ -94,8 +97,6 @@ abstract class _AudioStoreBase with Store {
             );
 
             ad.load();
-
-            BotToast.closeAllLoading();
 
             contador = 0;
             return;
@@ -167,7 +168,9 @@ abstract class _AudioStoreBase with Store {
   @action
   Future shareAudio(Audio audio) async {
     try {
-      MySnackBar(message: 'Carregando audio. Aguarde...');
+      BotToast.showLoading(backgroundColor: Colors.black38);
+
+      await Future.delayed(const Duration(milliseconds: 500));
 
       TypedData audioByte;
       late String path;
@@ -183,8 +186,11 @@ abstract class _AudioStoreBase with Store {
 
       File(path).writeAsBytesSync(audioByte.buffer.asUint8List());
 
+      BotToast.closeAllLoading();
+
       await Share.shareFiles([path]);
     } catch (e) {
+      BotToast.closeAllLoading();
       MySnackBar(message: e.toString());
     }
   }
