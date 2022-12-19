@@ -160,7 +160,14 @@ abstract class _AudioStoreBase with Store {
   Future shareAudio(Audio audio) async {
     MySnackBar(message: 'Carregando audio. Aguarde...');
 
-    ByteData audioByte = await rootBundle.load('assets/${audio.filePath}');
+    ByteData audioByte;
+
+    if (audio.assets) {
+      audioByte = await rootBundle.load('assets/${audio.filePath}');
+    } else {
+      audioByte = await rootBundle.load(audio.filePath);
+    }
+
     final temp = await getTemporaryDirectory();
     final path = '${temp.path}/${audio.filePath}';
 
