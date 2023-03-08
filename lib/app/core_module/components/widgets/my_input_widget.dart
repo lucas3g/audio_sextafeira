@@ -97,7 +97,10 @@ class _MyInputWidgetState extends State<MyInputWidget> {
       controller: widget.textEditingController,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        label: Text(widget.label),
+        label: Text(
+          widget.label,
+          style: AppTheme.textStyles.labelButtonLogin,
+        ),
         suffixIcon: widget.suffixIcon,
         filled: true,
         isDense: true,
@@ -106,6 +109,12 @@ class _MyInputWidgetState extends State<MyInputWidget> {
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             color: Colors.grey.shade700,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: AppTheme.colors.primary,
           ),
         ),
         enabledBorder: OutlineInputBorder(

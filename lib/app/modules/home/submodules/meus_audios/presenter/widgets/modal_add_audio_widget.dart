@@ -48,6 +48,7 @@ class _ModalAddAudioWidgetState extends State<ModalAddAudioWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       content: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -88,7 +89,12 @@ class _ModalAddAudioWidgetState extends State<ModalAddAudioWidget> {
                         onPressed: () async {
                           await widget.store.procurarAudio();
                         },
-                        child: const Text('Procurar audio'),
+                        child: Text(
+                          'Procurar audio',
+                          style: AppTheme.textStyles.button.copyWith(
+                            color: AppTheme.colors.primary,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -140,7 +146,12 @@ class _ModalAddAudioWidgetState extends State<ModalAddAudioWidget> {
                               }
                             }
                           : null,
-                      child: const Text('Salvar'),
+                      child: Text(
+                        'Salvar',
+                        style: AppTheme.textStyles.button.copyWith(
+                          color: AppTheme.colors.primary,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
