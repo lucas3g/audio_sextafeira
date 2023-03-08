@@ -3,7 +3,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:audience_network/audience_network.dart';
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/sqflite_adapter.dart';
 import 'package:audio_sextafeira/app/core_module/services/sqflite/adapters/tables.dart';
@@ -13,6 +12,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobx/mobx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -51,6 +51,54 @@ abstract class _AudioStoreBase with Store {
     _state = state;
   }
 
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: intersticialID,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('$ad loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < 3) {
+              _createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
+  }
+
   @action
   Future<void> playAudio(Audio audio) async {
     try {
@@ -65,38 +113,7 @@ abstract class _AudioStoreBase with Store {
               emit(StopAudioState());
             }
 
-            BotToast.showLoading(backgroundColor: Colors.black38);
-
-            await Future.delayed(const Duration(milliseconds: 500));
-
-            final ad = InterstitialAd(intersticialID);
-
-            ad.listener = InterstitialAdListener(
-              onDismissed: () {
-                ad.destroy();
-
-                emit(PlayAudioState());
-
-                audioPlay = audio.filePath;
-
-                if (audioPlay.contains('audios')) {
-                  audioPlayer.play(AssetSource(audio.filePath));
-                } else {
-                  audioPlayer.play(DeviceFileSource(audio.filePath));
-                }
-
-                audioPlayer.onPlayerComplete.listen((event) {
-                  emit(FinishAudioState());
-                });
-                BotToast.closeAllLoading();
-              },
-              onLoaded: () {
-                ad.show();
-                BotToast.closeAllLoading();
-              },
-            );
-
-            ad.load();
+            _showInterstitialAd();
 
             contador = 0;
             return;

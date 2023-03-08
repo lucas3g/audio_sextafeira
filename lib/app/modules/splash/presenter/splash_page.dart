@@ -24,7 +24,24 @@ class _SplashPageState extends State<SplashPage> {
       text: 'Carregando audios',
       duration: const Duration(seconds: 5),
     );
-    BotToast.showLoading(align: Alignment.bottomCenter);
+    BotToast.showLoading(
+      wrapAnimation: (controller, cancelFunc, widget) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.black54,
+            ),
+            child: CircularProgressIndicator(
+              color: AppTheme.colors.primary,
+            ),
+          ),
+        ),
+      ),
+    );
 
     final db = Modular.get<ISQLFliteStorage>();
 

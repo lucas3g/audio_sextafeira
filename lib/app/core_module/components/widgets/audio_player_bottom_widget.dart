@@ -103,6 +103,7 @@ class _AudioPlayerBottomWidgetState extends State<AudioPlayerBottomWidget>
       child: Column(
         children: [
           Slider(
+            activeColor: AppTheme.colors.primary,
             onChanged: (v) {
               final duration = _duration;
               if (duration == null) {

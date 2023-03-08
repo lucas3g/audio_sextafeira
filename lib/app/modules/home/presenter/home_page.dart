@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:audience_network/audience_network.dart';
 import 'package:audio_sextafeira/app/core_module/components/widgets/audio_player_bottom_widget.dart';
 import 'package:audio_sextafeira/app/core_module/constants/constants.dart';
 import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presenter/mobx/audio_store.dart';
@@ -12,6 +11,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -31,29 +31,36 @@ class _HomePageState extends State<HomePage>
   late final Animation<Offset> _animation =
       Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0))
           .animate(_animationController);
+  late BannerAd myBanner;
+  bool isAdLoaded = false;
 
-  // final BannerAd myBanner = BannerAd(
-  //   adUnitId: bannerID,
-  //   size: AdSize.banner,
-  //   request: const AdRequest(),
-  //   listener: const BannerAdListener(),
-  // );
+  initBannerAd() {
+    myBanner = BannerAd(
+      adUnitId: bannerID,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            isAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+    );
+
+    myBanner.load();
+  }
 
   @override
   void initState() {
     super.initState();
 
     if (!Platform.isWindows) {
-      AudienceNetwork.init(
-        iOSAdvertiserTrackingEnabled: true,
-        // testingId: "c48a4002-1ed6-4821-baa1-641c1243ce5b", //optional
-        // testMode: true,
-      );
+      initBannerAd();
     }
-
-    // if (!Platform.isWindows) {
-    //   myBanner.load();
-    // }
 
     Modular.to.pushNamed('./lista/');
   }
@@ -100,17 +107,13 @@ class _HomePageState extends State<HomePage>
             );
           }),
           if (!Platform.isWindows) ...[
-            Container(
-              alignment: const Alignment(0.5, 1),
-              child: BannerAd(
-                placementId: bannerID,
-                bannerSize: BannerSize.STANDARD,
-                listener: BannerAdListener(
-                  onLoaded: () => print('Ad carregou'),
-                  onError: (code, message) => print(message),
-                ),
-              ),
-            ),
+            isAdLoaded
+                ? SizedBox(
+                    height: myBanner.size.height.toDouble(),
+                    width: myBanner.size.width.toDouble(),
+                    child: AdWidget(ad: myBanner),
+                  )
+                : const SizedBox(),
             const SizedBox(height: 10),
           ],
           CurvedNavigationBar(

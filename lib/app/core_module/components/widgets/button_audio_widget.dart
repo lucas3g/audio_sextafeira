@@ -13,6 +13,7 @@ import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/presen
 import 'package:audio_sextafeira/app/modules/home/submodules/meus_audios/mobx/meus_audios_store.dart';
 import 'package:audio_sextafeira/app/theme/app_theme.dart';
 import 'package:audio_sextafeira/app/utils/constants.dart';
+import 'package:line_icons/line_icons.dart';
 
 class ButtonAudioWidget extends StatefulWidget {
   final Audio audio;
@@ -102,7 +103,7 @@ class _ButtonAudioWidgetState extends State<ButtonAudioWidget> {
                       await widget.audioStore.shareAudio(widget.audio);
                     },
                     icon: Icon(
-                      Icons.whatsapp_rounded,
+                      LineIcons.whatSApp,
                       color: AppTheme.colors.primary,
                     ),
                   ),

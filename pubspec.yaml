@@ -57,7 +57,8 @@ dependencies:
   equatable: ^2.0.5
   bot_toast: ^4.0.3
   uuid: ^3.0.6
-  audience_network: ^0.0.4
+  line_icons: ^2.0.1
+  google_mobile_ads: ^2.3.0
 
 
 dev_dependencies:

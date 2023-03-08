@@ -2,11 +2,8 @@ import 'package:audio_sextafeira/app/modules/home/submodules/lista_audios/domain
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-const baseUrl = String.fromEnvironment('BASE_URL');
-const baseUrlLicense = String.fromEnvironment('BASE_URL_LICENSE');
-
-const bannerID = '3438234189739575_3438248803071447';
-const intersticialID = '3438234189739575_3438249026404758';
+const bannerID = 'ca-app-pub-1898798427054986/3785290002';
+const intersticialID = 'ca-app-pub-1898798427054986/7968981556';
 
 Color randomColor() {
   final colors = [
