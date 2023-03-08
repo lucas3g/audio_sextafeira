@@ -13,6 +13,11 @@ Future<void> main() async {
 
   MobileAds.instance.initialize();
 
+  // RequestConfiguration requestConfiguration =
+  //     RequestConfiguration(testDeviceIds: ['5A8A6813409CA346303353BFA4188750']);
+
+  // await MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+
   runApp(
     ModularApp(
       module: AppModule(),

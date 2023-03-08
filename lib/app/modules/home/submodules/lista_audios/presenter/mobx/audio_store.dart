@@ -31,7 +31,9 @@ abstract class _AudioStoreBase with Store {
   _AudioStoreBase({
     required this.audioPlayer,
     required this.db,
-  });
+  }) {
+    _createInterstitialAd();
+  }
 
   @observable
   AudioStates _state = InitialAudioState();
@@ -60,13 +62,11 @@ abstract class _AudioStoreBase with Store {
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
-            print('$ad loaded');
             _interstitialAd = ad;
             _numInterstitialLoadAttempts = 0;
             _interstitialAd!.setImmersiveMode(true);
           },
           onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error.');
             _numInterstitialLoadAttempts += 1;
             _interstitialAd = null;
             if (_numInterstitialLoadAttempts < 3) {
@@ -76,21 +76,28 @@ abstract class _AudioStoreBase with Store {
         ));
   }
 
-  void _showInterstitialAd() {
+  void _showInterstitialAd(Audio audio) {
     if (_interstitialAd == null) {
-      print('Warning: attempt to show interstitial before loaded.');
       return;
     }
+
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (InterstitialAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
         _createInterstitialAd();
+
+        emit(PlayAudioState());
+        audioPlay = audio.filePath;
+        if (audioPlay.contains('audios')) {
+          audioPlayer.play(AssetSource(audio.filePath));
+        } else {
+          audioPlayer.play(DeviceFileSource(audio.filePath));
+        }
+        audioPlayer.onPlayerComplete.listen((event) {
+          emit(FinishAudioState());
+        });
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        print('$ad onAdFailedToShowFullScreenContent: $error');
         ad.dispose();
         _createInterstitialAd();
       },
@@ -113,7 +120,7 @@ abstract class _AudioStoreBase with Store {
               emit(StopAudioState());
             }
 
-            _showInterstitialAd();
+            _showInterstitialAd(audio);
 
             contador = 0;
             return;

@@ -31,10 +31,11 @@ class _HomePageState extends State<HomePage>
   late final Animation<Offset> _animation =
       Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0))
           .animate(_animationController);
+
   late BannerAd myBanner;
   bool isAdLoaded = false;
 
-  initBannerAd() {
+  initBannerAd() async {
     myBanner = BannerAd(
       adUnitId: bannerID,
       size: AdSize.banner,
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage>
       ),
     );
 
-    myBanner.load();
+    await myBanner.load();
   }
 
   @override
@@ -67,8 +68,6 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    // final AdWidget adWidget = AdWidget(ad: myBanner);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sons Engraçados'),
