@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:core';
+
+import 'package:flutter/material.dart';
 
 abstract class AppColors {
   Color get backgroundPrimary;
@@ -58,7 +59,7 @@ class AppColorDefault implements AppColors {
   //009342 - PAPAGAIO - cf1f36 BIO //004357 Cor legal
   //246EE9 Royal Blue //FF2400 Scarlet Red //3EB489 Mint Green
   @override
-  String get colorFinal => '246EE9';
+  String get colorFinal => 'ebab1a';
 
   @override
   int get hexFinal => int.parse('$hex$colorFinal');
