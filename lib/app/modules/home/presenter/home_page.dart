@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sons Engraçados'),
+        title: const Text('Sons Sexta Feira'),
         centerTitle: true,
         elevation: 5,
         shadowColor: Colors.black,

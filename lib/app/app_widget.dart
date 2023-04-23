@@ -15,7 +15,7 @@ class AppWidget extends StatelessWidget {
     ]);
 
     return MaterialApp.router(
-      title: 'Sons Engraçados',
+      title: 'Sons Sexta Feira',
       builder: (context, widget) {
         widget = BotToastInit()(context, widget);
         return widget;

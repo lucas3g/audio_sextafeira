@@ -115,7 +115,7 @@ class _SplashPageState extends State<SplashPage> {
             ),
             const SizedBox(height: 10),
             Text(
-              'Sons Engraçados',
+              'Sons Sexta Feira',
               style: AppTheme.textStyles.titleAppBar.copyWith(
                 color: AppTheme.colors.primary,
               ),
